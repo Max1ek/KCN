@@ -36,15 +36,6 @@ def handle_waitbar(timer,count):
 
 StartAnimationTimer = Timer(0.5, handle_waitbar)
 
-
-labProjector = Label(devTLP, 21).SetText('{}'.format(myDevices[2].name))
-labProjectorIp = Label(devTLP, 38).SetText('{}'.format(myDevices[2].ip))
-labProjectorState = Button(devTLP, 48).SetState((myDevices[2].state))
-
-labYamahaQL5 = Label(devTLP, 36).SetText('{}'.format(myDevices[1].name))
-labYamahaQL5Ip = Label(devTLP, 39).SetText('{}'.format(myDevices[1].ip))
-labYamahaQL5State = Button(devTLP, 49).SetState((myDevices[1].state))
-
 labDMP64 = Label(devTLP, 37).SetText('{}'.format(myDevices[0].name))
 labDMP64Ip = Label(devTLP, 45).SetText('{}'.format(myDevices[0].ip))
 labDMP64State = Button(devTLP, 50)
@@ -56,6 +47,55 @@ def handle_dmp64_state_changed(src, state):
     ProgramLog('DMP64 state updated to: {}'.format(state), 'info')
 
 
+labYamahaQL5 = Label(devTLP, 36).SetText('{}'.format(myDevices[1].name))
+labYamahaQL5Ip = Label(devTLP, 39).SetText('{}'.format(myDevices[1].ip))
+labYamahaQL5State = Button(devTLP, 49)
+labYamahaQL5State.SetState(myDevices[1].state)
+
+@eventEx(myDevices[1].StateChanged, 'Triggered')
+def handle_yamahaql5_state_changed(src, state):
+    labYamahaQL5State.SetState(state)
+    ProgramLog('YamahaQL5 state updated to: {}'.format(state), 'info')
+
+labProjector = Label(devTLP, 21).SetText('{}'.format(myDevices[2].name))
+labProjectorIp = Label(devTLP, 38).SetText('{}'.format(myDevices[2].ip))
+labProjectorState = Button(devTLP, 48)
+labProjectorState.SetState(myDevices[2].state)
+
+@eventEx(myDevices[2].StateChanged, 'Triggered')
+def handle_projector_state_changed(src, state):
+    labProjectorState.SetState(state)
+    ProgramLog('Projector state updated to: {}'.format(state), 'info')
+
+labQuickQ = Label(devTLP, 46).SetText('{}'.format(myDevices[3].name))
+labQuickQIp = Label(devTLP, 47).SetText('{}'.format(myDevices[3].ip))
+labQuickQState = Button(devTLP, 51)
+labQuickQState.SetState(myDevices[3].state)
+
+@eventEx(myDevices[3].StateChanged, 'Triggered')
+def handle_quickq_state_changed(src, state):
+    labQuickQState.SetState(state)
+    ProgramLog('QuickQ state updated to: {}'.format(state), 'info')
+
+labCamera1 = Label(devTLP, 55).SetText('{}'.format(myDevices[4].name))
+labCamera1Ip = Label(devTLP, 56).SetText('{}'.format(myDevices[4].ip))
+labCamera1State = Button(devTLP, 57)
+labCamera1State.SetState(myDevices[4].state)
+
+@eventEx(myDevices[4].StateChanged, 'Triggered')
+def handle_camera1_state_changed(src, state):
+    labCamera1State.SetState(state)
+    ProgramLog('Camera1 state updated to: {}'.format(state), 'info')
+
+labCamera2 = Label(devTLP, 58).SetText('{}'.format(myDevices[5].name))
+labCamera2Ip = Label(devTLP, 59).SetText('{}'.format(myDevices[5].ip))
+labCamera2State = Button(devTLP, 60)
+labCamera2State.SetState(myDevices[5].state)
+
+@eventEx(myDevices[5].StateChanged, 'Triggered')
+def handle_camera2_state_changed(src, state):
+    labCamera2State.SetState(state)
+    ProgramLog('Camera2 state updated to: {}'.format(state), 'info')
 
 btnCinema = Button(devTLP, 2)
 btnDiscusion = Button(devTLP, 3)
