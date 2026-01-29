@@ -124,41 +124,11 @@ btnLiftDown = Button(devTLP, 9)
 btnScreenDown = Button(devTLP, 23)
 btnScreenUp = Button(devTLP, 24)
 
-_startup_lock = True
-
-def _startup_timer_tick(timer, count):
-    if _startup_lock:
-        devTLP.ShowPage('StartPage')
-
-_startup_timer = Timer(1, _startup_timer_tick)
-_startup_timer.Restart()
-
-_all_buttons = [
-    btnCinema,
-    btnDiscusion,
-    btnTheatre,
-    btnProjectorStatus,
-    btnProjectorON,
-    btnProjectorOFF,
-    btnProjectorInputHdmi1,
-    btnProjectorInputHdmi2,
-    btnProjectorInputDisplayPort,
-    btnLifUp,
-    btnLiftDown,
-    btnScreenDown,
-    btnScreenUp,
-]
 
 @eventEx(btnCinema, 'Pressed')
 @eventEx(btnDiscusion, 'Pressed')
 @eventEx(btnTheatre, 'Pressed')
 def show_main_page(button: Button, state: str):
-    global _startup_lock
-    if state != "Pressed":
-        return
-    _startup_lock = False
-    if _startup_timer.State == "Running":
-        _startup_timer.Pause()
     if button == btnCinema:
         projectorInputGroup.SetCurrent(btnProjectorInputHdmi1)
         yamahaPresetGroup.SetCurrent(btnYamahaPreset1)
@@ -247,24 +217,3 @@ def homeBtn_Pressed(homeBtn:Button, state:str):
     quickQ30PresetGroup.SetCurrent(None)
     devTLP.ShowPage('StartPage')   
 
-_all_buttons.extend([
-    btnCamera1Preset1,
-    btnCamera1Preset2,
-    btnCamera1Preset3,
-    btnCamera2Preset1,
-    btnCamera2Preset2,
-    btnCamera2Preset3,
-    btnYamahaPreset1,
-    btnYamahaPreset2,
-    btnYamahaPreset3,
-    btnQuickQ30Preset1,
-    btnQuickQ30Preset2,
-    btnQuickQ30Preset3,
-    btnStatus,
-    btnClosePopup,
-    homeBtn,
-])
-
-@eventEx(_all_buttons, 'Pressed')
-def log_button_pressed(button: Button, state: str):
-    return

@@ -74,10 +74,20 @@ DEVICE_CONFIG = [
 ]
 
 myDevices = [MyDevice(name, ip, 0) for name, _, ip in DEVICE_CONFIG]
+_ui_unlocked = False
 
 def _register_device_events(dev, device_obj):
+    def _unlock_ui_once():
+        global _ui_unlocked
+        if _ui_unlocked:
+            return
+        _ui_unlocked = True
+        Wait(2, lambda: devTLP.HidePopup('PopupConnections'))
+        Wait(2, lambda: devTLP.ShowPage('StartPage'))
+
     def _connected(interface, state, _device=device_obj):
         _device.update(state=1)
+        _unlock_ui_once()
 
     def _disconnected(interface, state, _device=device_obj):
         ProgramLog('{} disconnected'.format(_device.get_name()), 'info')
