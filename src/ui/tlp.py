@@ -21,6 +21,7 @@ from devices import devCamera2 as devCamera2
 from devices import devLiftRelay as devLiftRelay
 from devices import devScreenRelay as devScreenRelay
 from devices import devDMP64 as devDMP64
+from system import myDevices
 
 # Define UI Objects
 
@@ -36,6 +37,23 @@ def handle_waitbar(timer,count):
 StartAnimationTimer = Timer(0.5, handle_waitbar)
 
 
+labProjector = Label(devTLP, 21).SetText('{}'.format(myDevices[2].name))
+labProjectorIp = Label(devTLP, 38).SetText('{}'.format(myDevices[2].ip))
+labProjectorState = Button(devTLP, 48).SetState((myDevices[2].state))
+
+labYamahaQL5 = Label(devTLP, 36).SetText('{}'.format(myDevices[1].name))
+labYamahaQL5Ip = Label(devTLP, 39).SetText('{}'.format(myDevices[1].ip))
+labYamahaQL5State = Button(devTLP, 49).SetState((myDevices[1].state))
+
+labDMP64 = Label(devTLP, 37).SetText('{}'.format(myDevices[0].name))
+labDMP64Ip = Label(devTLP, 45).SetText('{}'.format(myDevices[0].ip))
+labDMP64State = Button(devTLP, 50)
+labDMP64State.SetState(myDevices[0].state)
+
+@eventEx(myDevices[0].StateChanged, 'Triggered')
+def handle_dmp64_state_changed(src, state):
+    labDMP64State.SetState(state)
+    ProgramLog('DMP64 state updated to: {}'.format(state), 'info')
 
 
 
@@ -56,98 +74,6 @@ projectorInputGroup.SetCurrent(btnProjectorInputHdmi1)
 
 projectorONoffGroup = MESet([btnProjectorON, btnProjectorOFF])
 
-
-_dmp64_status = "Unknown"
-_dmp64_flash_state = 0
-
-def _dmp64_flash_timer_tick(timer, count):
-    _toggle_dmp64_status_flash()
-
-_dmp64_flash_timer = Timer(0.5, _dmp64_flash_timer_tick)
-_dmp64_flash_timer.Pause()
-
-def _set_projector_status_state(state):
-    btnProjectorStatus.SetState(state)
-
-def _start_dmp64_flash():
-    if _dmp64_flash_timer.State != "Running":
-        _dmp64_flash_timer.Restart()
-
-def _stop_dmp64_flash():
-    if _dmp64_flash_timer.State == "Running":
-        _dmp64_flash_timer.Pause()
-
-def _toggle_dmp64_status_flash():
-    global _dmp64_flash_state
-    _dmp64_flash_state = 0 if _dmp64_flash_state == 1 else 1
-    _set_projector_status_state(_dmp64_flash_state)
-
-def _update_dmp64_status(command, value, qualifier):
-    global _dmp64_status
-    _dmp64_status = value
-
-    if value == "Connected":
-        _stop_dmp64_flash()
-        _set_projector_status_state(1)
-    elif value == "Disconnected":
-        _stop_dmp64_flash()
-        _set_projector_status_state(0)
-    else:
-        _start_dmp64_flash()
-
-try:
-    devDMP64.SubscribeStatus("ConnectionStatus", None, _update_dmp64_status)
-    _start_dmp64_flash()
-except Exception as exc:
-    ProgramLog("DMP64 SubscribeStatus failed: {}".format(exc), "error")
-
-def _attach_dmp64_event_handlers():
-    if hasattr(devDMP64, "Connected"):
-        prev_connected = devDMP64.Connected
-        def _connected(interface, state):
-            try:
-                if callable(prev_connected):
-                    prev_connected(interface, state)
-            except Exception as exc:
-                ProgramLog("DMP64 connected handler error: {}".format(exc), "error")
-            _stop_dmp64_flash()
-            _set_projector_status_state(1)
-        devDMP64.Connected = _connected
-
-    if hasattr(devDMP64, "Disconnected"):
-        prev_disconnected = devDMP64.Disconnected
-        def _disconnected(interface, state):
-            try:
-                if callable(prev_disconnected):
-                    prev_disconnected(interface, state)
-            except Exception as exc:
-                ProgramLog("DMP64 disconnected handler error: {}".format(exc), "error")
-            _stop_dmp64_flash()
-            _set_projector_status_state(0)
-        devDMP64.Disconnected = _disconnected
-
-_attach_dmp64_event_handlers()
-
-def _attach_dmp64_rx_handler():
-    if hasattr(devDMP64, "Interface"):
-        iface = devDMP64.Interface
-    else:
-        iface = devDMP64
-
-    if hasattr(iface, "ReceiveData"):
-        prev_rx = iface.ReceiveData
-        if callable(prev_rx):
-            def _rx(interface, data):
-                try:
-                    prev_rx(interface, data)
-                except Exception as exc:
-                    ProgramLog("DMP64 rx handler error: {}".format(exc), "error")
-                if _dmp64_status != "Connected":
-                    _stop_dmp64_flash()
-                    _set_projector_status_state(1)
-            iface.ReceiveData = _rx
-
-_attach_dmp64_rx_handler()
 
 @eventEx(projectorInputGroup.Objects,'Pressed')
 def projectorInputGroup_Pressed(button:Button, state:str):
