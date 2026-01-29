@@ -1,0 +1,682 @@
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 1 of 12 Rev. B1 
+ 
+ 
+This document provides additional assistance with wiring your Extron IP Link Pro Control Processor to your device. 
+Different components may require a different wiring scheme than those listed below. 
+ 
+For complete operating instructions, refer to the user's manual for the specific IP Link Pro Control Processor or the 
+documentation supplied by the manufacturer of the controlled device. 
+ 
+For more information on using Global Scripter Modules, refer to the "Guide to Using Scripter Modules" document. 
+ 
+ 
+Device Specifications 
+Device Type:  Audio Processor 
+Manufacturer:  Yamaha 
+Firmware Version:  V5.10 
+Model(s):  QL5, QL1 
+  
+ 
+Tested on the Following Software and Firmware Versions 
+ 
+IP Link Pro Control Processor Firmware Global Scripter Version 
+3.04.0001-b002 2.3.1 
+ 
+Version History 
+ 
+Module Version Date Notes 
+1_1_1_0 8/13/2019 Added commands: DCA Group Level and DCA Group Mute. 
+1_1_0_0 2/18/2019 
+Removed Firmware Version status. Added Device Status. Added status 
+support for Recall Preset command. 
+The following command names or parameters were updated: 
+• Input Level 
+o Channel parameter: 0—63 → 1—64 
+For model QL1, 0—31 → 1—32 
+o Value: -32768 to 1000, step size 1 → -138 to 10, step size 
+0.05 dB 
+• Input Mute 
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 2 of 12 Rev. B1 
+ 
+o Channel parameter: 0—63 → 1—64 
+For model QL1, 0—31 → 1—32 
+ 
+• Matrix Level 
+o Channel: 0—7 → 1—8 
+o Value: -32768 to 1000, step size 1 → -138 to 10, step size 
+0.05 dB 
+• Matrix Mute 
+o Channel: 0—7 → 1—8 
+• Mix Level 
+o Channel: 0—15 → 1—16 
+o Value: -32768 to 1000, step size 1 → -138 to 10, step size 
+0.05 dB 
+• Mix Mute 
+o Channel: 0—15 → 1—16 
+• Recall Preset → Preset Recall 
+• Store Preset → Preset Save 
+• Stereo Level 
+Value: -32768 to 1000, step size 1 → -138 to 10, step size 0.05 dB 
+1_0_0_0 11/16/2017 Initial Version 
+ 
+  
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 3 of 12 Rev. B1 
+ 
+Module Notes 
+ 
+• Unidirectional variable must be set to 'True' if status is not required. Default value is 'False'.            
+Example: InterfaceName.Unidirectional = 'True' 
+ 
+• connectionCounter variable must be set to the number of queries that will be sent to the device before 
+displaying 'Disconnected' if no response is received. Default value is 15.                                               
+Example: InterfaceName.connectionCounter = 5 
+ 
+• Due to the device’s level step sizing, the Update command is needed for proper functionality.  
+ 
+ 
+Supported Class and Example 
+ 
+EthernetClass 
+    InterfaceName = ModuleName.EthernetClass('192.168.254.254', 49280, Model='QL5') 
+ 
+ 
+Level Step Sizing 
+The QL5 and QL1 devices have different step sizing for each range of the levels. Refer to the table below for the 
+proper step size of each level range. This driver has already been optimized to support these step sizes. 
+Level Range Step Size 
+-138.00 to -96.00  3 dB 
+-96.00 to -78.00 1 dB 
+-78 to -40  0.2 dB 
+-40 to -20 0.1 dB 
+-20 to 10 0.05 dB 
+  
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 4 of 12 Rev. B1 
+ 
+Control Commands 
+ 
+Format with Qualifier: 
+ InterfaceName.Set(Command, Value, {'Qualifier Key': 'Qualifier Value'}) 
+ 
+Format without Qualifier: 
+ InterfaceName.Set(Command, Value) 
+ 
+Command 
+DCAGroupLevel 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '16' 
+  
+    # InputLevel example 
+    InterfaceName.Set('DCAGroupLevel', 10, {'Channel': '1'}) 
+Command 
+DCAGroupMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '16' 
+  
+    # InputLevel example 
+    InterfaceName.Set('DCAGroupLevel', 10, {'Channel': '1'}) 
+Command 
+InputLevel 2 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '32' 
+Qualifier Value 
+'1' – '64' 1 
+ 
+    # InputLevel example 
+    InterfaceName.Set('InputLevel', 10, {'Channel': '1'}) 
+Command 
+InputMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '32' 
+Qualifier Value 
+'1' – '64' 1 
+ 
+    # InputMute example 
+    InterfaceName.Set('InputMute', 'On', {'Channel': '1'}) 
+Command 
+MatrixLevel 2 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '8' 
+  
+    # MatrixLevel example 
+    InterfaceName.Set('MatrixLevel', 10, {'Channel': '1'}) 
+Command 
+MatrixMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '8' 
+  
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 5 of 12 Rev. B1 
+ 
+    # MatrixMute example 
+    InterfaceName.Set('MatrixMute', 'On', {'Channel': '1'}) 
+Command 
+MixLevel 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '16' 
+  
+    # MixLevel example 
+    InterfaceName.Set('MixLevel', 10, {'Channel': '1'}) 
+Command 
+MixMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '16' 
+  
+    # MixMute example 
+    InterfaceName.Set('MixMute', 'On', {'Channel': '1'}) 
+Command 
+PresetRecall 
+Value 
+'0' – '300' 
+  
+    # PresetRecall example 
+    InterfaceName.Set('PresetRecall', '0') 
+Command 
+PresetSave 
+Value 
+'1' – '300' 
+  
+    # PresetSave example 
+    InterfaceName.Set('PresetSave', '1') 
+Command 
+StereoLevel 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'Stereo L' 
+Qualifier Value 
+'Stereo R' 
+Qualifier Value 
+'Mono(C)' 
+    # StereoLevel example 
+    InterfaceName.Set('StereoLevel', 10, {'Channel': 'Stereo L'}) 
+Command 
+StereoMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'Stereo L' 
+Qualifier Value 
+'Stereo R' 
+Qualifier Value 
+'Mono(C)' 
+    # StereoMute example 
+    InterfaceName.Set('StereoMute', 'On', {'Channel': 'Stereo L'}) 
+1 Only supported for model QL5. 
+2 Refer to the level table on Page 2 for details regarding the step sizing of the value. 
+ 
+  
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 6 of 12 Rev. B1 
+ 
+Status Available 
+For all commands, call Update to receive the latest status. ConnectionStatus does not support the Update 
+function and is triggered by the device providing a successful response to other Update function calls. 
+ 
+Format with Qualifier: 
+ InterfaceName.Update(Command, {'Qualifier Key': 'Qualifier Value'}) 
+ Value = InterfaceName.ReadStatus(Command, {'Qualifier Key': 'Qualifier Value'}) 
+ InterfaceName.SubscribeStatus(Command, {'Qualifier Key': 'Qualifier Value'}, FeedbackHandler)  
+ FeedbackHandler will be called only when the specified qualifier gets a new status. 
+ 
+Format without Qualifier: 
+ InterfaceName.Update(Command) 
+ Value = InterfaceName.ReadStatus(Command) 
+ InterfaceName.SubscribeStatus(Command, None, FeedbackHandler)  
+ FeedbackHandler will be called when any qualifier gets a new status. 
+ 
+Command 
+ConnectionStatus 
+Value 
+'Connected' 
+Value 
+'Disconnected' 
+ 
+    # ConnectionStatus examples 
+    Value = InterfaceName.ReadStatus('ConnectionStatus') 
+    InterfaceName.SubscribeStatus('ConnectionStatus', None, FeedbackHandler) 
+Command 
+DeviceStatus 
+Value 
+'Normal' 
+Value 
+'Emergency' 
+Value 
+'Booting' 
+ 'Update' 'Diagnostics'  
+    # DeviceStatus examples 
+    InterfaceName.Update('DeviceStatus') 
+    Value = InterfaceName.ReadStatus('DeviceStatus') 
+    InterfaceName.SubscribeStatus('DeviceStatus', None, FeedbackHandler) 
+Command 
+DCAGroupLevel 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '16' 
+  
+    # DCAGroupLevel examples 
+    InterfaceName.Update('DCAGroupLevel', {'Channel': '1'}) 
+    Value = InterfaceName.ReadStatus('DCAGroupLevel', {'Channel': '1'}) 
+    InterfaceName.SubscribeStatus('DCAGroupLevel', None, FeedbackHandler) 
+Command 
+DCAGroupMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '16' 
+  
+    # DCAGroupMute examples 
+    InterfaceName.Update('DCAGroupMute', {'Channel': '1'}) 
+    Value = InterfaceName.ReadStatus('DCAGroupMute', {'Channel': '1'}) 
+    InterfaceName.SubscribeStatus('DCAGroupMute', None, FeedbackHandler) 
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 7 of 12 Rev. B1 
+ 
+Command 
+InputLevel 2 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '32' 
+Qualifier Value 
+'1' – '64' 1 
+ 
+    # InputLevel examples 
+    InterfaceName.Update('InputLevel', {'Channel': '1'}) 
+    Value = InterfaceName.ReadStatus('InputLevel', {'Channel': '1'}) 
+    InterfaceName.SubscribeStatus('InputLevel', None, FeedbackHandler) 
+Command 
+InputMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '32' 
+Qualifier Value 
+'1' – '64' 1 
+ 
+    # InputMute examples 
+    InterfaceName.Update('InputMute', {'Channel': '1'}) 
+    Value = InterfaceName.ReadStatus('InputMute', {'Channel': '1'}) 
+    InterfaceName.SubscribeStatus('InputMute', None, FeedbackHandler) 
+Command 
+MatrixLevel 2 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '8' 
+  
+    # MatrixLevel examples 
+    InterfaceName.Update('MatrixLevel', {'Channel': '1'}) 
+    Value = InterfaceName.ReadStatus('MatrixLevel', {'Channel': '1'}) 
+    InterfaceName.SubscribeStatus('MatrixLevel', None, FeedbackHandler) 
+Command 
+MatrixMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '8' 
+  
+    # MatrixMute examples 
+    InterfaceName.Update('MatrixMute', {'Channel': '1'}) 
+    Value = InterfaceName.ReadStatus('MatrixMute', {'Channel': '1'}) 
+    InterfaceName.SubscribeStatus('MatrixMute', None, FeedbackHandler) 
+Command 
+MixLevel 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '16' 
+  
+    # MixLevel examples 
+    InterfaceName.Update('MixLevel', {'Channel': '1'}) 
+    Value = InterfaceName.ReadStatus('MixLevel', {'Channel': '1'}) 
+    InterfaceName.SubscribeStatus('MixLevel', None, FeedbackHandler) 
+Command 
+MixMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'1' – '16' 
+  
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 8 of 12 Rev. B1 
+ 
+    # MixMute examples 
+    InterfaceName.Update('MixMute', {'Channel': '1'}) 
+    Value = InterfaceName.ReadStatus('MixMute', {'Channel': '1'}) 
+    InterfaceName.SubscribeStatus('MixMute', None, FeedbackHandler) 
+Command 
+PresetRecall 
+Value 
+'0' – '300' 
+  
+    # PresetRecall examples 
+    InterfaceName.Update('PresetRecall') 
+    Value = InterfaceName.ReadStatus('PresetRecall') 
+    InterfaceName.SubscribeStatus('PresetRecall', None, FeedbackHandler) 
+Command 
+StereoLevel 
+Value 
+-138 to 10 in steps of 0.05 
+  
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'Stereo L' 
+Qualifier Value 
+'Stereo R' 
+Qualifier Value 
+'Mono(C)' 
+    # StereoLevel examples 
+    InterfaceName.Update('StereoLevel', {'Channel': 'Stereo L'}) 
+    Value = InterfaceName.ReadStatus('StereoLevel', {'Channel': 'Stereo L'}) 
+    InterfaceName.SubscribeStatus('StereoLevel', None, FeedbackHandler) 
+Command 
+StereoMute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+Qualifier Key 
+      'Channel' 
+Qualifier Value 
+'Stereo L' 
+Qualifier Value 
+'Stereo R' 
+Qualifier Value 
+'Mono(C)' 
+    # StereoMute examples 
+    InterfaceName.Update('StereoMute', {'Channel': 'Stereo L'}) 
+    Value = InterfaceName.ReadStatus('StereoMute', {'Channel': 'Stereo L'}) 
+    InterfaceName.SubscribeStatus('StereoMute', None, FeedbackHandler) 
+1 Only supported for model QL5 
+2 Refer to the level table on Page 2 for details regarding the step sizing of the value. 
+ 
+  
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 9 of 12 Rev. B1 
+ 
+ 
+ 
+Network communication 
+When configuring the Ethernet module, be sure device settings match those of the Global Scripter ethernet 
+interface 
+Port Type: Ethernet 
+Default Port: 49280 
+Logon Credentials 
+Supported: 
+No 
+Multi-Connection 
+Capabilities: 
+Yes 
+Port Changeability: No 
+ 
+ 
+ 
+Ethernet Module Configuration Description 
+Please refer to user manual for settings and changes to the network communication 
+ 
+Notes for the Device 
+ 
+  
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 10 of 12 Rev. B1 
+ 
+Appendix A. Set Commands 
+ 
+Input Level 10 Channel 1 set MIXER:Current/InCh/Fader/Level 0 0 1000\x0A 
+Input Level 10 Channel 32 set MIXER:Current/InCh/Fader/Level 31 0 1000\x0A 
+Input Level 10 Channel 64 set MIXER:Current/InCh/Fader/Level 63 0 1000\x0A 
+Input Level -138 Channel 1 set MIXER:Current/InCh/Fader/Level 0 0 -13800\x0A 
+Input Level -138 Channel 32 set MIXER:Current/InCh/Fader/Level 31 0 -
+13800\x0A 
+Input Level -138 Channel 64 set MIXER:Current/InCh/Fader/Level 63 0 -
+13800\x0A 
+Input Mute Off Channel 1 set MIXER:Current/InCh/Fader/On 0 0 0\x0A 
+Input Mute Off Channel 32 set MIXER:Current/InCh/Fader/On 31 0 0\x0A 
+Input Mute Off Channel 64 set MIXER:Current/InCh/Fader/On 63 0 0\x0A 
+Input Mute On Channel 1 set MIXER:Current/InCh/Fader/On 0 0 1\x0A 
+Input Mute On Channel 32 set MIXER:Current/InCh/Fader/On 31 0 1\x0A 
+Input Mute On Channel 64 set MIXER:Current/InCh/Fader/On 63 0 1\x0A 
+Matrix Level 10 Channel 1 set MIXER:Current/Mtrx/Fader/Level 0 0 1000\x0A 
+Matrix Level 10 Channel 8 set MIXER:Current/Mtrx/Fader/Level 7 0 1000\x0A 
+Matrix Level -138 Channel 1 set MIXER:Current/Mtrx/Fader/Level 0 0 -13800\x0A 
+Matrix Level -138 Channel 8 set MIXER:Current/Mtrx/Fader/Level 7 0 -13800\x0A 
+Matrix Mute Off Channel 1 set MIXER:Current/Mtrx/Fader/On 0 0 0\x0A 
+Matrix Mute Off Channel 8 set MIXER:Current/Mtrx/Fader/On 7 0 0\x0A 
+Matrix Mute On Channel 1 set MIXER:Current/Mtrx/Fader/On 0 0 1\x0A 
+Matrix Mute On Channel 8 set MIXER:Current/Mtrx/Fader/On 7 0 1\x0A 
+Mix Level 10 Channel 1 set MIXER:Current/Mix/Fader/Level 0 0 1000\x0A 
+Mix Level 10 Channel 16 set MIXER:Current/Mix/Fader/Level 15 0 1000\x0A 
+Mix Level -138 Channel 1 set MIXER:Current/Mix/Fader/Level 0 0 -13800\x0A 
+Mix Level -138 Channel 16 set MIXER:Current/Mix/Fader/Level 15 0 -13800\x0A 
+Mix Mute Off Channel 1 set MIXER:Current/Mix/Fader/On 0 0 0\x0A 
+Mix Mute Off Channel 16 set MIXER:Current/Mix/Fader/On 15 0 0\x0A 
+Mix Mute On Channel 1 set MIXER:Current/Mix/Fader/On 0 0 1\x0A 
+Mix Mute On Channel 16 set MIXER:Current/Mix/Fader/On 15 0 1\x0A 
+Preset Recall 0 ssrecall_ex MIXER:Lib/Scene 0\x0A 
+Preset Recall 300 ssrecall_ex MIXER:Lib/Scene 300\x0A 
+Preset Save 1 ssupdate_ex MIXER:Lib/Scene 1\x0A 
+Preset Save 300 ssupdate_ex MIXER:Lib/Scene 300\x0A 
+Stereo Level 10 Channel Mono(C) set MIXER:Current/St/Fader/Level 2 0 1000\x0A 
+Stereo Level 10 Channel Stereo L set MIXER:Current/St/Fader/Level 0 0 1000\x0A 
+Stereo Level 10 Channel Stereo R set MIXER:Current/St/Fader/Level 1 0 1000\x0A 
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 11 of 12 Rev. B1 
+ 
+Stereo Level -138 Channel Mono(C) set MIXER:Current/St/Fader/Level 2 0 -13800\x0A 
+Stereo Level -138 Channel Stereo L set MIXER:Current/St/Fader/Level 0 0 -13800\x0A 
+Stereo Level -138 Channel Stereo R set MIXER:Current/St/Fader/Level 1 0 -13800\x0A 
+Stereo Mute Off Channel Mono(C) set MIXER:Current/St/Fader/On 2 0 0\x0A 
+Stereo Mute Off Channel Stereo L set MIXER:Current/St/Fader/On 0 0 0\x0A 
+Stereo Mute Off Channel Stereo R set MIXER:Current/St/Fader/On 1 0 0\x0A 
+Stereo Mute On Channel Mono(C) set MIXER:Current/St/Fader/On 2 0 1\x0A 
+Stereo Mute On Channel Stereo L set MIXER:Current/St/Fader/On 0 0 1\x0A 
+Stereo Mute On Channel Stereo R set MIXER:Current/St/Fader/On 1 0 1\x0A 
+ 
+  
+yama_dsp_QL1_QL5_v1_1_1_0.
+py  
+Global Scripter Module 
+Communication Sheet 
+Revision: 8/13/2019 
+ 
+ 
+  
+Page 12 of 12 Rev. B1 
+ 
+Appendix B. Update Commands 
+ 
+Device Status devstatus runmode\x0A 
+Input Level Channel 1 get MIXER:Current/InCh/Fader/Level 0 0\x0A 
+Input Level Channel 32 get MIXER:Current/InCh/Fader/Level 31 0\x0A 
+Input Level Channel 64 get MIXER:Current/InCh/Fader/Level 63 0\x0A 
+Input Mute Channel 1 get MIXER:Current/InCh/Fader/On 0 0\x0A 
+Input Mute Channel 32 get MIXER:Current/InCh/Fader/On 31 0\x0A 
+Input Mute Channel 64 get MIXER:Current/InCh/Fader/On 63 0\x0A 
+Matrix Level Channel 1 get MIXER:Current/Mtrx/Fader/Level 0 0\x0A 
+Matrix Level Channel 8 get MIXER:Current/Mtrx/Fader/Level 7 0\x0A 
+Matrix Mute Channel 1 get MIXER:Current/Mtrx/Fader/On 0 0\x0A 
+Matrix Mute Channel 8 get MIXER:Current/Mtrx/Fader/On 7 0\x0A 
+Mix Level Channel 1 get MIXER:Current/Mix/Fader/Level 0 0\x0A 
+Mix Level Channel 16 get MIXER:Current/Mix/Fader/Level 15 0\x0A 
+Mix Mute Channel 1 get MIXER:Current/Mix/Fader/On 0 0\x0A 
+Mix Mute Channel 16 get MIXER:Current/Mix/Fader/On 15 0\x0A 
+Preset Recall sscurrent_ex MIXER:Lib/Scene\x0A 
+Stereo Level Channel Mono(C) get MIXER:Current/St/Fader/Level 2 0\x0A 
+Stereo Level Channel Stereo L get MIXER:Current/St/Fader/Level 0 0\x0A 
+Stereo Level Channel Stereo R get MIXER:Current/St/Fader/Level 1 0\x0A 
+Stereo Mute Channel Mono(C) get MIXER:Current/St/Fader/On 2 0\x0A 
+Stereo Mute Channel Stereo L get MIXER:Current/St/Fader/On 0 0\x0A 
+Stereo Mute Channel Stereo R get MIXER:Current/St/Fader/On 1 0\x0A 
+ 

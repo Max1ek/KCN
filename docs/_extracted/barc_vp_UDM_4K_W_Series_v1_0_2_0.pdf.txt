@@ -1,0 +1,559 @@
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 1 of 11 Rev. B1 
+This document provides additional assistance with wiring your Extron IP Link Pro Control Processor to your 
+device. Different components may require a different wiring scheme than those listed below. 
+ 
+For complete operating instructions, refer to the user's manual for the specific IP Link Pro Control Processor or 
+the documentation supplied by the manufacturer of the controlled device. 
+ 
+For more information on using Global Scripter Modules, refer to the "Guide to Using Scripter Modules" 
+document. 
+ 
+ 
+Device Specifications 
+Device Type:  Video Projector 
+Manufacturer:  Barco 
+Firmware Version:  N/A 
+Model(s):  UDM-4K22, UDM-W22 
+  
+ 
+Tested on the Following Software and Firmware Versions  
+ 
+IP Link Pro Control Processor Firmware Global Scripter Version 
+3.18.0001-b002  2.23.0.13 
+ 
+Version History 
+ 
+Module Version Date Notes 
+1_0_2_0 2/5/2025 Initial Version 
+ 
+  
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 2 of 11 Rev. B1 
+Module Notes 
+ 
+• Unidirectional variable must be set to 'True' if status is not required. Default value is 'False'.            
+Example: InterfaceName.Unidirectional = 'True' 
+ 
+• connectionCounter variable must be set to the number of queries that will be sent to the device 
+before displaying 'Disconnected' if no response is received. Default value is 15.                                               
+Example: InterfaceName.connectionCounter = 5 
+ 
+Supported Classes and Examples 
+ 
+SerialClass 
+    InterfaceName = ModuleName.SerialClass(ProcessorName, 'COM1', Model='UDM-4K22') 
+SerialOverEthernetClass 
+    InterfaceName = ModuleName.SerialOverEthernetClass('192.168.254.254', 2001, Model='UDM-4K22') 
+EthernetClass 
+    InterfaceName = ModuleName.EthernetClass('192.168.254.254', 9090, Model='UDM-4K22') 
+ 
+  
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 3 of 11 Rev. B1 
+Control Commands 
+ 
+Format with Qualifier: 
+ InterfaceName.Set(Command, Value, {'Qualifier Key': 'Qualifier Value'}) 
+ 
+Format without Qualifier: 
+ InterfaceName.Set(Command, Value) 
+ 
+Command 
+DesiredDisplayMode 
+Value 
+'Mono' 
+Value 
+'Auto Stereo' 
+Value 
+'Active Stereo' 
+ 'Night Vision' 'IG Pixel Shift' 'IG Pixel Shift NV' 
+ 'IG Pixel Shift Full NV'   
+    # DesiredDisplayMode example 
+    InterfaceName.Set('DesiredDisplayMode', 'Mono') 
+Command 
+Focus 
+Value 
+'In' 
+Value 
+'Out' 
+ 
+    # Focus example 
+    InterfaceName.Set('Focus', 'In') 
+Command 
+Illumination 
+Value 
+0 to 100 in steps of 1 
+    # Illumination example 
+    InterfaceName.Set('Illumination', 100) 
+Command 
+Input 1 
+Value 
+'L1 DisplayPort' 
+Value 
+'L1 Quad SDI' 
+Value 
+'L1 HDMI' 
+ 'L1 HDBaseT 1' 'L1 HDBaseT 2' 'L1 SDI A' 
+ 'L1 SDI B' 'L1 SDI C' 'L1 SDI D' 
+ 'L2 DisplayPort A' 'L2 DisplayPort B' 'L2 DisplayPort C' 
+ 'L2 DisplayPort D' 'L2 Dual DP - AB' 'L2 Quad column DP' 
+ 'L2 Quad DP' 'L2 Dual Head Dual DP - 
+AB|CD' 
+'L2 Dual Head DP - B|D' 
+ 'L2 Dual Head DP - A|C' 'L2 Dual DP - CD' 'L2 Dual DP - BD' 
+ 'L2 Dual DP - AC'   
+    # Input example 
+    InterfaceName.Set('Input', 'L1 DisplayPort') 
+Command 
+InvertImageStereoGlassSy
+nc 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # InvertImageStereoGlassSync example 
+    InterfaceName.Set('InvertImageStereoGlassSync', 'On') 
+Command 
+Power 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Power example 
+    InterfaceName.Set('Power', 'On') 
+1 All L2 Input values are present only when the optional Quad DP1.2 input slot is installed. 
+ 
+  
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 4 of 11 Rev. B1 
+Status Available 
+For all commands, call Update to receive the latest status. ConnectionStatus does not support the Update 
+function and is triggered by the device providing a successful response to other Update function calls. 
+ 
+Format with Qualifier: 
+ InterfaceName.Update(Command, {'Qualifier Key': 'Qualifier Value'}) 
+ Value = InterfaceName.ReadStatus(Command, {'Qualifier Key': 'Qualifier Value'}) 
+ InterfaceName.SubscribeStatus(Command, {'Qualifier Key': 'Qualifier Value'}, 
+FeedbackHandler) 
+ FeedbackHandler will be called only when the specified qualifier gets a new status. 
+ 
+Format without Qualifier: 
+ InterfaceName.Update(Command) 
+ Value = InterfaceName.ReadStatus(Command) 
+ InterfaceName.SubscribeStatus(Command, None, FeedbackHandler) 
+ FeedbackHandler will be called when any qualifier gets a new status. 
+ 
+Command 
+ConnectionStatus 
+Value 
+'Connected' 
+Value 
+'Disconnected' 
+ 
+    # ConnectionStatus example 
+    Value = InterfaceName.ReadStatus('ConnectionStatus') 
+    InterfaceName.SubscribeStatus('ConnectionStatus', None, FeedbackHandler) 
+Command 
+Illumination 
+Value 
+0 to 100 in steps of 1 
+    # Illumination example 
+    InterfaceName.Update('Illumination') 
+    Value = InterfaceName.ReadStatus('Illumination') 
+    InterfaceName.SubscribeStatus('Illumination', None, FeedbackHandler) 
+Command 
+Input 2 
+Value 
+'L1 DisplayPort' 
+Value 
+'L1 Quad SDI' 
+Value 
+'L1 HDMI' 
+ 'L1 HDBaseT 1' 'L1 HDBaseT 2' 'L1 SDI A' 
+ 'L1 SDI B' 'L1 SDI C' 'L1 SDI D' 
+ 'L2 DisplayPort A' 'L2 DisplayPort B' 'L2 DisplayPort C' 
+ 'L2 DisplayPort D' 'L2 Dual DP - AB' 'L2 Quad column DP' 
+ 'L2 Quad DP' 'L2 Dual Head Dual DP - 
+AB|CD' 
+'L2 Dual Head DP - B|D' 
+ 'L2 Dual Head DP - A|C' 'L2 Dual DP - CD' 'L2 Dual DP - BD' 
+ 'L2 Dual DP - AC'   
+    # Input example 
+    InterfaceName.Update('Input') 
+    Value = InterfaceName.ReadStatus('Input') 
+    InterfaceName.SubscribeStatus('Input', None, FeedbackHandler) 
+Command 
+InvertImageStereoGlassSy
+nc 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # InvertImageStereoGlassSync example 
+    InterfaceName.Update('InvertImageStereoGlassSync') 
+    Value = InterfaceName.ReadStatus('InvertImageStereoGlassSync') 
+    InterfaceName.SubscribeStatus('InvertImageStereoGlassSync', None, FeedbackHandler) 
+Command 
+LaserHours 
+Value 
+Hours 
+  
+    # LaserHours example 
+    InterfaceName.Update('LaserHours') 
+    Value = InterfaceName.ReadStatus('LaserHours') 
+    InterfaceName.SubscribeStatus('LaserHours', None, FeedbackHandler) 
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 5 of 11 Rev. B1 
+Command 
+OperationHours 
+Value 
+Hours 
+  
+    # OperationHours example 
+    InterfaceName.Update('OperationHours') 
+    Value = InterfaceName.ReadStatus('OperationHours') 
+    InterfaceName.SubscribeStatus('OperationHours', None, FeedbackHandler) 
+Command 
+Power 
+Value 
+'On' 
+Value 
+'Off' 
+Value 
+'Warming Up' 
+ 'Cooling Down' 'Booting Up' 'Eco / Power Save 
+Mode' 
+ 'Service' 'Error'  
+    # Power example 
+    InterfaceName.Update('Power') 
+    Value = InterfaceName.ReadStatus('Power') 
+    InterfaceName.SubscribeStatus('Power', None, FeedbackHandler) 
+1 All L2 Input values are present only when the optional Quad DP1.2 input slot is installed. 
+ 
+  
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 6 of 11 Rev. B1 
+ 
+ 
+Cable and Adapter Requirements 
+Captive Screw to Male DB9 RS-232 Serial Cable 
+  
+Notes for the Device 
+ 
+ 
+ 
+Serial communication 
+Port Type:  RS-232 Parity:  None 
+Baud Rate:  19200 Stop Bits:  One 
+Data Bits:  8 Flow Control:  None 
+ 
+Pin Assignments Diagram 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 7 of 11 Rev. B1 
+ 
+ 
+Network Communication 
+When configuring the Ethernet module, be sure device settings match those of the Global Scripter ethernet 
+interface. 
+Port Type: Ethernet (TCP) 
+Default Port: 9090 
+Logon Credentials 
+Supported: 
+No 
+Multi-Connection 
+Capabilities: 
+Undetermined 
+Port Changeability: No 
+ 
+ 
+ 
+Ethernet Module Configuration Description  
+Please refer to user manual for settings and changes to the network communication 
+ 
+Notes for the Device 
+ 
+  
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 8 of 11 Rev. B1 
+Appendix A. Set Commands 
+ 
+Desired Display Mode Active Stereo {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.display.desireddisplaymode", "value": 
+"ActiveStereo"}, "id": 270}\x0D\x0A 
+Desired Display Mode Auto Stereo {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.display.desireddisplaymode", "value": 
+"AutoStereo"}, "id": 270}\x0D\x0A 
+Desired Display Mode IG Pixel Shift {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.display.desireddisplaymode", "value": 
+"IGPixelShift"}, "id": 270}\x0D\x0A 
+Desired Display Mode IG Pixel Shift Full NV {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.display.desireddisplaymode", "value": 
+"IGPixelShiftFullNV"}, "id": 270}\x0D\x0A 
+Desired Display Mode IG Pixel Shift NV {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.display.desireddisplaymode", "value": 
+"IGPixelShiftNV"}, "id": 270}\x0D\x0A 
+Desired Display Mode Mono {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.display.desireddisplaymode", "value": 
+"Mono"}, "id": 270}\x0D\x0A 
+Desired Display Mode Night Vision {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.display.desireddisplaymode", "value": 
+"NightVision"}, "id": 270}\x0D\x0A 
+Focus In {"jsonrpc": "2.0", "method": 
+"optics.focus.stepforward", "params": {"steps": 
+1}, "id": 260}\x0D\x0A 
+Focus Out {"jsonrpc": "2.0", "method": 
+"optics.focus.stepreverse", "params": {"steps": 
+1}, "id": 260}\x0D\x0A 
+Illumination 0 {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"illumination.sources.laser.power", "value": 
+0.0}, "id": 230}\x0D\x0A 
+Illumination 100 {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"illumination.sources.laser.power", "value": 
+100.0}, "id": 230}\x0D\x0A 
+Input L1 DisplayPort {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 
+DisplayPort"}, "id": 150}\x0D\x0A 
+Input L1 HDBaseT 1 {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 HDBaseT 
+1"}, "id": 150}\x0D\x0A 
+Input L1 HDBaseT 2 {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 HDBaseT 
+2"}, "id": 150}\x0D\x0A 
+Input L1 HDMI {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 HDMI"}, 
+"id": 150}\x0D\x0A 
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 9 of 11 Rev. B1 
+Input L1 Quad SDI {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 Quad 
+SDI"}, "id": 150}\x0D\x0A 
+Input L1 SDI A {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 SDI 
+A"}, "id": 150}\x0D\x0A 
+Input L1 SDI B {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 SDI 
+B"}, "id": 150}\x0D\x0A 
+Input L1 SDI C {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 SDI 
+C"}, "id": 150}\x0D\x0A 
+Input L1 SDI D {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L1 SDI 
+D"}, "id": 150}\x0D\x0A 
+Input L2 DisplayPort A {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 
+DisplayPort A"}, "id": 150}\x0D\x0A 
+Input L2 DisplayPort B {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 
+DisplayPort B"}, "id": 150}\x0D\x0A 
+Input L2 DisplayPort C {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 
+DisplayPort C"}, "id": 150}\x0D\x0A 
+Input L2 DisplayPort D {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 
+DisplayPort D"}, "id": 150}\x0D\x0A 
+Input L2 Dual DP - AB {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Dual DP 
+- AB"}, "id": 150}\x0D\x0A 
+Input L2 Dual DP - AC {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Dual DP 
+- AC"}, "id": 150}\x0D\x0A 
+Input L2 Dual DP - BD {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Dual DP 
+- BD"}, "id": 150}\x0D\x0A 
+Input L2 Dual DP - CD {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Dual DP 
+- CD"}, "id": 150}\x0D\x0A 
+Input L2 Dual Head DP - A|C {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Dual 
+Head DP - A|C"}, "id": 150}\x0D\x0A 
+Input L2 Dual Head DP - B|D {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Dual 
+Head DP - B|D"}, "id": 150}\x0D\x0A 
+Input L2 Dual Head Dual DP - AB|CD {"jsonrpc": "2.0", "method": "property.set", 
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 10 of 11 Rev. B1 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Dual 
+Head Dual DP - AB|CD"}, "id": 150}\x0D\x0A 
+Input L2 Quad column DP {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Quad 
+column DP"}, "id": 150}\x0D\x0A 
+Input L2 Quad DP {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.window.main.source", "value": "L2 Quad 
+DP"}, "id": 150}\x0D\x0A 
+Invert Image Stereo Glass Sync Off {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.stereo.glassync.invert", "value": false}, 
+"id": 170}\x0D\x0A 
+Invert Image Stereo Glass Sync On {"jsonrpc": "2.0", "method": "property.set", 
+"params": {"property": 
+"image.stereo.glassync.invert", "value": true}, 
+"id": 170}\x0D\x0A 
+Power Off {"jsonrpc": "2.0","method": 
+"system.poweroff","params": {},"id": 
+130}\x0D\x0A 
+Power On {"jsonrpc": "2.0","method": 
+"system.poweron","params": {},"id": 130}\x0D\x0A 
+ 
+  
+ 
+barc_vp_UDM_4K_W_Series_v1
+_0_2_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 2/5/2025 
+ 
+ 
+ 
+ Page 11 of 11 Rev. B1 
+Appendix B. Update Commands  
+ 
+Illumination {"jsonrpc": "2.0", "method": "property.get", 
+"params": {"property": 
+"illumination.sources.laser.power"}, "id": 
+230}\x0D\x0A 
+Input {"jsonrpc": "2.0", "method": "property.get", 
+"params": {"property": 
+"image.window.main.source"}, "id": 150}\x0D\x0A 
+Invert Image Stereo Glass Sync {"jsonrpc": "2.0", "method": "property.get", 
+"params": {"property": 
+"image.stereo.glassync.invert"}, "id": 
+170}\x0D\x0A 
+Laser Hours {"jsonrpc": "2.0", "method": "property.get", 
+"params": {"property": 
+"statistics.laserruntime.value"}, "id": 
+2}\x0D\x0A 
+Operation Hours {"jsonrpc": "2.0", "method": "property.get", 
+"params": {"property": 
+"statistics.projectorruntime.value"}, "id": 
+1}\x0D\x0A 
+Power {"jsonrpc": "2.0","method": 
+"property.get","params": {"property": 
+"system.state"},"id": 130}\x0D\x0A 
+ 
+ 

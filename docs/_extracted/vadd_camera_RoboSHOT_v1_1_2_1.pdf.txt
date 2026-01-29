@@ -1,0 +1,1041 @@
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 1 of 19 Rev. B1 
+This document provides additional assistance with wiring your Extron IP Link Pro Control Processor to your 
+device. Different components may require a different wiring scheme than those listed below. 
+ 
+For complete operating instructions, refer to the user's manual for the specific IP Link Pro Control Processor or 
+the documentation supplied by the manufacturer of the controlled device. 
+ 
+For more information on using Global Scripter Modules, refer to the "Guide to Using Scripter Modules" 
+document. 
+ 
+ 
+Device Specifications 
+Device Type:  Camera 
+Manufacturer:  Vaddio 
+Firmware Version:  N/A 
+Model(s):  RoboSHOT 12 HDMI, RoboSHOT 30 HDMI, RoboSHOT 20 UHD, RoboSHOT 40 UHD 
+  
+ 
+Tested on the Following Software and Firmware Versions 
+ 
+IP Link Pro Control Processor Firmware Global Scripter Version 
+3.16.0000-b013 2.17.0 
+ 
+Version History 
+ 
+Module Version Date Notes 
+1_1_2_1 12/1/2022 Fixed Device ID parameter for Serial control. 
+1_1_2_0 3/24/2021 
+Updates to Ethernet module: 
+o Added status to Power 
+o Removed Firmware Status 
+o Fixed authentication 
+Added Auto Focus status. 
+1_0_5_0 10/7/2019 Added model RoboSHOT 40 UHD. 
+1_0_4_0 3/6/2019 Added Iris command and Auto Iris status to Ethernet 
+1_0_2_0 11/16/2017 Initial Version 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 2 of 19 Rev. B1 
+Module Notes 
+ 
+• Unidirectional variable must be set to 'True' if status is not required. Default value is 'False'.            
+Example: InterfaceName.Unidirectional = 'True' 
+ 
+• connectionCounter variable must be set to the number of queries that will be sent to the device 
+before displaying 'Disconnected' if no response is received. Default value is 15.                                               
+Example: InterfaceName.connectionCounter = 5 
+ 
+• If login credentials are required, devicePassword and deviceUsername must be set accordingly. 
+devicePassword and deviceUsername default values are password and admin respectively. 
+Example: InterfaceName.devicePassword = 'extron' 
+ 
+• DeviceID variable must be set accordingly. Default value is '1'. DeviceID ranges from 1' to '7. 
+Example: InterfaceName.DeviceID = '1' 
+o For Serial protocol only, if there is no option to set the camera ID in the camera’s settings 
+menu, then according to Vaddio it should be set to 1 within the module 
+ 
+Supported Classes and Examples 
+ 
+SerialClass 
+    InterfaceName = ModuleName.SerialClass(ProcessorName, 'COM1', Model='RoboSHOT 12 HDMI') 
+SerialOverEthernetClass 
+    InterfaceName = ModuleName.SerialOverEthernetClass('192.168.254.254', 2001, Model='RoboSHOT 12 
+HDMI') 
+EthernetClass 
+    InterfaceName = ModuleName.EthernetClass('192.168.254.254', 23, Model='RoboSHOT 12 HDMI') 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 3 of 19 Rev. B1 
+Control Commands (Serial) 
+ 
+Format with Qualifier: 
+ InterfaceName.Set(Command, Value, {'Qualifier Key': 'Qualifier Value'}) 
+ 
+Format without Qualifier: 
+ InterfaceName.Set(Command, Value) 
+ 
+Command 
+AutoFocus 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # AutoFocus example 
+    InterfaceName.Set('AutoFocus', 'On') 
+Command 
+Backlight 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Backlight example 
+    InterfaceName.Set('Backlight', 'On') 
+Command 
+Focus 
+Value 
+'Near' 
+Value 
+'Far' 
+Value 
+'Stop' 
+Qualifier Key 
+      'Speed' 
+Qualifier Value 
+'0' – '7' 
+  
+    # Focus example 
+    InterfaceName.Set('Focus', 'Near', {'Speed': '0'}) 
+Command 
+Freeze 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Freeze example 
+    InterfaceName.Set('Freeze', 'On') 
+Command 
+Iris 
+Value 
+'Reset' 
+Value 
+'Up' 
+Value 
+'Down' 
+    # Iris example 
+    InterfaceName.Set('Iris', 'Reset') 
+Command 
+Mute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Mute example 
+    InterfaceName.Set('Mute', 'On') 
+Command 
+PanTiltZoom 
+Value 
+'Up' 
+Value 
+'Down' 
+Value 
+'Left' 
+ 'Right' 'In' 'Out' 
+ 'Stop'   
+Qualifier Key 
+      'Pan Speed' 
+Qualifier Value 
+'1' – '24' 
+  
+Qualifier Key 
+      'Tilt Speed' 
+Qualifier Value 
+'1' – '20' 
+  
+Qualifier Key 
+      'Zoom Speed' 
+Qualifier Value 
+'0' – '7' 
+  
+    # PanTiltZoom example 
+    InterfaceName.Set('PanTiltZoom', 'Up', {'Pan Speed': '1', 'Tilt Speed': '1', 'Zoom Speed': 
+'0'}) 
+Command 
+Power 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Power example 
+    InterfaceName.Set('Power', 'On') 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 4 of 19 Rev. B1 
+Command 
+PresetRecall 
+Value 
+'1' – '16' 
+  
+    # PresetRecall example 
+    InterfaceName.Set('PresetRecall', '1') 
+Command 
+PresetSave 
+Value 
+'1' – '16' 
+  
+    # PresetSave example 
+    InterfaceName.Set('PresetSave', '1') 
+Command 
+RecallTriSync 
+Value 
+'0' – '15' 
+  
+    # RecallTriSync example 
+    InterfaceName.Set('RecallTriSync', '0') 
+Command 
+SetTriSync 
+Value 
+'0' – '15' 
+  
+Qualifier Key 
+      'Speed' 
+Qualifier Value 
+1 to 26 in steps of 1 
+    # SetTriSync example 
+    InterfaceName.Set('SetTriSync', '0', {'Speed': 26}) 
+Command 
+WhiteBalance 
+Value 
+'Auto' 
+Value 
+'Indoor' 
+Value 
+'Outdoor' 
+ 'One Push White 
+Balance' 
+'ATW' 'Manual' 
+ 'One Push Trigger' 'Outdoor Auto' 'Sodium Lamp Auto' 
+ 'Sodium Lamp' 'Sodium Lamp Outdoor 
+Auto' 
+ 
+    # WhiteBalance example 
+    InterfaceName.Set('WhiteBalance', 'Auto') 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 5 of 19 Rev. B1 
+Status Available (Serial) 
+For all commands, call Update to receive the latest status. ConnectionStatus does not support the Update 
+function and is triggered by the device providing a successful response to other Update function calls. 
+ 
+Format with Qualifier: 
+ InterfaceName.Update(Command, {'Qualifier Key': 'Qualifier Value'}) 
+ Value = InterfaceName.ReadStatus(Command, {'Qualifier Key': 'Qualifier Value'}) 
+ InterfaceName.SubscribeStatus(Command, {'Qualifier Key': 'Qualifier Value'}, 
+FeedbackHandler) 
+ FeedbackHandler will be called only when the specified qualifier gets a new status. 
+ 
+Format without Qualifier: 
+ InterfaceName.Update(Command) 
+ Value = InterfaceName.ReadStatus(Command) 
+ InterfaceName.SubscribeStatus(Command, None, FeedbackHandler) 
+ FeedbackHandler will be called when any qualifier gets a new status. 
+ 
+Command 
+AutoFocus 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # AutoFocus example 
+    InterfaceName.Update('AutoFocus') 
+    Value = InterfaceName.ReadStatus('AutoFocus') 
+    InterfaceName.SubscribeStatus('AutoFocus', None, FeedbackHandler) 
+Command 
+Backlight 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Backlight example 
+    InterfaceName.Update('Backlight') 
+    Value = InterfaceName.ReadStatus('Backlight') 
+    InterfaceName.SubscribeStatus('Backlight', None, FeedbackHandler) 
+Command 
+ConnectionStatus 
+Value 
+'Connected' 
+Value 
+'Disconnected' 
+ 
+    # ConnectionStatus example 
+    Value = InterfaceName.ReadStatus('ConnectionStatus') 
+    InterfaceName.SubscribeStatus('ConnectionStatus', None, FeedbackHandler) 
+Command 
+Freeze 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Freeze example 
+    InterfaceName.Update('Freeze') 
+    Value = InterfaceName.ReadStatus('Freeze') 
+    InterfaceName.SubscribeStatus('Freeze', None, FeedbackHandler) 
+Command 
+Mute 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Mute example 
+    InterfaceName.Update('Mute') 
+    Value = InterfaceName.ReadStatus('Mute') 
+    InterfaceName.SubscribeStatus('Mute', None, FeedbackHandler) 
+Command 
+Power 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Power example 
+    InterfaceName.Update('Power') 
+    Value = InterfaceName.ReadStatus('Power') 
+    InterfaceName.SubscribeStatus('Power', None, FeedbackHandler) 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 6 of 19 Rev. B1 
+Command 
+WhiteBalance 
+Value 
+'Auto' 
+Value 
+'Indoor' 
+Value 
+'Outdoor' 
+ 'One Push White 
+Balance' 
+'ATW' 'Manual' 
+ 'One Push Trigger' 'Outdoor Auto' 'Sodium Lamp Auto' 
+ 'Sodium Lamp' 'Sodium Lamp Outdoor 
+Auto' 
+ 
+    # WhiteBalance example 
+    InterfaceName.Update('WhiteBalance') 
+    Value = InterfaceName.ReadStatus('WhiteBalance') 
+    InterfaceName.SubscribeStatus('WhiteBalance', None, FeedbackHandler) 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 7 of 19 Rev. B1 
+Control Commands (Ethernet) 
+ 
+Format with Qualifier: 
+ InterfaceName.Set(Command, Value, {'Qualifier Key': 'Qualifier Value'}) 
+ 
+Format without Qualifier: 
+ InterfaceName.Set(Command, Value) 
+ 
+Command 
+AutoFocus 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # AutoFocus example 
+    InterfaceName.Set('AutoFocus', 'On') 
+Command 
+AutoIris 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # AutoIris example 
+    InterfaceName.Set('AutoIris', 'On') 
+Command 
+Focus 
+Value 
+'Near' 
+Value 
+'Far' 
+Value 
+'Stop' 
+Qualifier Key 
+      'Speed' 
+Qualifier Value 
+'0' – '7' 
+  
+    # Focus example 
+    InterfaceName.Set('Focus', 'Near', {'Speed': '0'}) 
+Command 
+Iris 
+Value 
+0 to 13 in steps of 1 
+    # Iris example 
+    InterfaceName.Set('Iris', 13) 
+Command 
+Pan 
+Value 
+'Left' 
+Value 
+'Right' 
+Value 
+'Stop' 
+Qualifier Key 
+      'Speed' 
+Qualifier Value 
+'1' – '24' 
+Qualifier Value 
+'Default' 
+ 
+    # Pan example 
+    InterfaceName.Set('Pan', 'Left', {'Speed': '1'}) 
+Command 
+Power 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Power example 
+    InterfaceName.Set('Power', 'On') 
+Command 
+PresetRecall 
+Value 
+'1' – '16' 
+  
+    # PresetRecall example 
+    InterfaceName.Set('PresetRecall', '1') 
+Command 
+PresetSave 
+Value 
+'1' – '16' 
+  
+    # PresetSave example 
+    InterfaceName.Set('PresetSave', '1') 
+Command 
+Tilt 
+Value 
+'Up' 
+Value 
+'Down' 
+Value 
+'Stop' 
+Qualifier Key 
+      'Speed' 
+Qualifier Value 
+'1' – '20' 
+Qualifier Value 
+'Default' 
+ 
+    # Tilt example 
+    InterfaceName.Set('Tilt', 'Up', {'Speed': '1'}) 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 8 of 19 Rev. B1 
+Command 
+Zoom 
+Value 
+'In' 
+Value 
+'Out' 
+Value 
+'Stop' 
+Qualifier Key 
+      'Speed' 
+Qualifier Value 
+'1' – '7' 
+Qualifier Value 
+'Default' 
+ 
+    # Zoom example 
+    InterfaceName.Set('Zoom', 'In', {'Speed': '1'}) 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 9 of 19 Rev. B1 
+Status Available (Ethernet) 
+For all commands, call Update to receive the latest status. ConnectionStatus does not support the Update 
+function and is triggered by the device providing a successful response to other Update function calls. 
+ 
+Format with Qualifier: 
+ InterfaceName.Update(Command, {'Qualifier Key': 'Qualifier Value'}) 
+ Value = InterfaceName.ReadStatus(Command, {'Qualifier Key': 'Qualifier Value'}) 
+ InterfaceName.SubscribeStatus(Command, {'Qualifier Key': 'Qualifier Value'}, 
+FeedbackHandler) 
+ FeedbackHandler will be called only when the specified qualifier gets a new status. 
+ 
+Format without Qualifier: 
+ InterfaceName.Update(Command) 
+ Value = InterfaceName.ReadStatus(Command) 
+ InterfaceName.SubscribeStatus(Command, None, FeedbackHandler) 
+ FeedbackHandler will be called when any qualifier gets a new status. 
+ 
+Command 
+AutoFocus 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # AutoFocus example 
+    InterfaceName.Update('AutoFocus') 
+    Value = InterfaceName.ReadStatus('AutoFocus') 
+    InterfaceName.SubscribeStatus('AutoFocus', None, FeedbackHandler) 
+Command 
+AutoIris 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # AutoIris example 
+    InterfaceName.Update('AutoIris') 
+    Value = InterfaceName.ReadStatus('AutoIris') 
+    InterfaceName.SubscribeStatus('AutoIris', None, FeedbackHandler) 
+Command 
+ConnectionStatus 
+Value 
+'Connected' 
+Value 
+'Disconnected' 
+ 
+    # ConnectionStatus example 
+    Value = InterfaceName.ReadStatus('ConnectionStatus') 
+    InterfaceName.SubscribeStatus('ConnectionStatus', None, FeedbackHandler) 
+Command 
+Iris 
+Value 
+0 to 13 in steps of 1 
+    # Iris example 
+    InterfaceName.Update('Iris') 
+    Value = InterfaceName.ReadStatus('Iris') 
+    InterfaceName.SubscribeStatus('Iris', None, FeedbackHandler) 
+Command 
+Power 
+Value 
+'On' 
+Value 
+'Off' 
+ 
+    # Power example 
+    InterfaceName.Update('Power') 
+    Value = InterfaceName.ReadStatus('Power') 
+    InterfaceName.SubscribeStatus('Power', None, FeedbackHandler) 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 10 of 19 Rev. B1 
+ 
+ 
+Cable and Adapter Requirements 
+Captive Screw to Male RJ45 connector. 
+  
+Notes for the Device 
+Device Baud Rate can be controlled by DIP Switches depending on the models. DIP switches can be located on 
+the back of the camera or in the web interface on the System Page (DIP Switches tab). 
+ 
+ 
+ 
+Serial communication 
+Port Type:  RS-232 Parity:  None 
+Baud Rate:  9600 Stop Bits:  One 
+Data Bits:  8 Flow Control:  None 
+ 
+Pin Assignments Diagram 
+ 
+  
+
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 11 of 19 Rev. B1 
+ 
+ 
+Network communication 
+When configuring the Ethernet module, be sure device settings match those of the Global Scripter ethernet 
+interface. 
+Port Type: Ethernet (TCP) 
+Default Port: 23 
+Logon Credentials 
+Supported: 
+Yes 
+Default Username: admin 
+Default Password: password 
+Multi-Connection 
+Capabilities: 
+Undetermined 
+Port Changeability: Yes 
+ 
+ 
+ 
+Ethernet Module Configuration Description 
+Please refer to user manual for settings and changes to the network communication. 
+ 
+Notes for the Device 
+The Vaddio RoboSHOT camera system contains the physical camera and a 'OneLink' receiver. Both units 
+receive unique IP addresses. When trying to control the c amera via Ethernet, use the IP address of the 
+camera, rather than the receiver.  
+ 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 12 of 19 Rev. B1 
+Appendix A. Set Commands(Serial) 
+ 
+Auto Focus Off \x81\x01\x048\x03\xFF 
+Auto Focus On \x81\x01\x048\x02\xFF 
+Backlight Off \x81\x01\x043\x03\xFF 
+Backlight On \x81\x01\x043\x02\xFF 
+Focus Far Speed 0 \x81\x01\x04\x08 \xFF 
+Focus Far Speed 7 \x81\x01\x04\x08'\xFF 
+Focus Near Speed 0 \x81\x01\x04\x080\xFF 
+Focus Near Speed 7 \x81\x01\x04\x087\xFF 
+Focus Stop Speed 0 \x81\x01\x04\x08\x00\xFF 
+Focus Stop Speed 7 \x81\x01\x04\x08\x00\xFF 
+Freeze Off \x81\x01\x04b\x03\xFF 
+Freeze On \x81\x01\x04b\x02\xFF 
+Iris Down \x81\x01\x04\x0B\x03\xFF 
+Iris Reset \x81\x01\x04\x0B\x00\xFF 
+Iris Up \x81\x01\x04\x0B\x02\xFF 
+Mute Off \x81\x01\x04u\x03\xFF 
+Mute On \x81\x01\x04u\x02\xFF 
+Pan Tilt Zoom Down Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x01\x00\x03\x02\x03\xFF 
+Pan Tilt Zoom Down Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x01\x07\x03\x02\x03\xFF 
+Pan Tilt Zoom Down Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x14\x00\x03\x02\x03\xFF 
+Pan Tilt Zoom Down Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x14\x07\x03\x02\x03\xFF 
+Pan Tilt Zoom Down Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x01\x00\x03\x02\x03\xFF 
+Pan Tilt Zoom Down Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x01\x07\x03\x02\x03\xFF 
+Pan Tilt Zoom Down Pan Speed 24 Tilt Speed 20 
+Zoom Speed 0 
+\x81\x01\x06\x0A\x18\x14\x00\x03\x02\x03\xFF 
+Pan Tilt Zoom Down Pan Speed 24 Tilt Speed 20 
+Zoom Speed 7 
+\x81\x01\x06\x0A\x18\x14\x07\x03\x02\x03\xFF 
+Pan Tilt Zoom In Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x01\x00\x03\x03\x01\xFF 
+Pan Tilt Zoom In Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x01\x07\x03\x03\x01\xFF 
+Pan Tilt Zoom In Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x14\x00\x03\x03\x01\xFF 
+Pan Tilt Zoom In Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x14\x07\x03\x03\x01\xFF 
+Pan Tilt Zoom In Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x01\x00\x03\x03\x01\xFF 
+Pan Tilt Zoom In Pan Speed 24 Tilt Speed 1 Zoom \x81\x01\x06\x0A\x18\x01\x07\x03\x03\x01\xFF 
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 13 of 19 Rev. B1 
+Speed 7 
+Pan Tilt Zoom In Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x14\x00\x03\x03\x01\xFF 
+Pan Tilt Zoom In Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x14\x07\x03\x03\x01\xFF 
+Pan Tilt Zoom Left Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x01\x00\x01\x03\x03\xFF 
+Pan Tilt Zoom Left Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x01\x07\x01\x03\x03\xFF 
+Pan Tilt Zoom Left Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x14\x00\x01\x03\x03\xFF 
+Pan Tilt Zoom Left Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x14\x07\x01\x03\x03\xFF 
+Pan Tilt Zoom Left Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x01\x00\x01\x03\x03\xFF 
+Pan Tilt Zoom Left Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x01\x07\x01\x03\x03\xFF 
+Pan Tilt Zoom Left Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x14\x00\x01\x03\x03\xFF 
+Pan Tilt Zoom Left Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x14\x07\x01\x03\x03\xFF 
+Pan Tilt Zoom Out Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x01\x00\x03\x03\x02\xFF 
+Pan Tilt Zoom Out Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x01\x07\x03\x03\x02\xFF 
+Pan Tilt Zoom Out Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x14\x00\x03\x03\x02\xFF 
+Pan Tilt Zoom Out Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x14\x07\x03\x03\x02\xFF 
+Pan Tilt Zoom Out Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x01\x00\x03\x03\x02\xFF 
+Pan Tilt Zoom Out Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x01\x07\x03\x03\x02\xFF 
+Pan Tilt Zoom Out Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x14\x00\x03\x03\x02\xFF 
+Pan Tilt Zoom Out Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x14\x07\x03\x03\x02\xFF 
+Pan Tilt Zoom Right Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x01\x00\x02\x03\x03\xFF 
+Pan Tilt Zoom Right Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x01\x07\x02\x03\x03\xFF 
+Pan Tilt Zoom Right Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x14\x00\x02\x03\x03\xFF 
+Pan Tilt Zoom Right Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x14\x07\x02\x03\x03\xFF 
+Pan Tilt Zoom Right Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x01\x00\x02\x03\x03\xFF 
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 14 of 19 Rev. B1 
+Pan Tilt Zoom Right Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x01\x07\x02\x03\x03\xFF 
+Pan Tilt Zoom Right Pan Speed 24 Tilt Speed 20 
+Zoom Speed 0 
+\x81\x01\x06\x0A\x18\x14\x00\x02\x03\x03\xFF 
+Pan Tilt Zoom Right Pan Speed 24 Tilt Speed 20 
+Zoom Speed 7 
+\x81\x01\x06\x0A\x18\x14\x07\x02\x03\x03\xFF 
+Pan Tilt Zoom Stop Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x01\x00\x03\x03\x03\xFF 
+Pan Tilt Zoom Stop Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x01\x07\x03\x03\x03\xFF 
+Pan Tilt Zoom Stop Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x14\x00\x03\x03\x03\xFF 
+Pan Tilt Zoom Stop Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x14\x07\x03\x03\x03\xFF 
+Pan Tilt Zoom Stop Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x01\x00\x03\x03\x03\xFF 
+Pan Tilt Zoom Stop Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x01\x07\x03\x03\x03\xFF 
+Pan Tilt Zoom Stop Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x14\x00\x03\x03\x03\xFF 
+Pan Tilt Zoom Stop Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x14\x07\x03\x03\x03\xFF 
+Pan Tilt Zoom Up Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x01\x00\x03\x01\x03\xFF 
+Pan Tilt Zoom Up Pan Speed 1 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x01\x07\x03\x01\x03\xFF 
+Pan Tilt Zoom Up Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x01\x14\x00\x03\x01\x03\xFF 
+Pan Tilt Zoom Up Pan Speed 1 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x01\x14\x07\x03\x01\x03\xFF 
+Pan Tilt Zoom Up Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x01\x00\x03\x01\x03\xFF 
+Pan Tilt Zoom Up Pan Speed 24 Tilt Speed 1 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x01\x07\x03\x01\x03\xFF 
+Pan Tilt Zoom Up Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 0 
+\x81\x01\x06\x0A\x18\x14\x00\x03\x01\x03\xFF 
+Pan Tilt Zoom Up Pan Speed 24 Tilt Speed 20 Zoom 
+Speed 7 
+\x81\x01\x06\x0A\x18\x14\x07\x03\x01\x03\xFF 
+Power Off \x81\x01\x04\x00\x03\xFF 
+Power On \x81\x01\x04\x00\x02\xFF 
+Preset Recall 1 \x81\x01\x04?\x02\x00\xFF 
+Preset Recall 16 \x81\x01\x04?\x02\x0F\xFF 
+Preset Save 1 \x81\x01\x04?\x01\x00\xFF 
+Preset Save 16 \x81\x01\x04?\x01\x0F\xFF 
+Recall Tri-Sync 0 \x81\x01\x04?\x12\x00\xFF 
+Recall Tri-Sync 15 \x81\x01\x04?\x12\x0F\xFF 
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 15 of 19 Rev. B1 
+Set Tri-Sync 0 Speed 1 \x81\x01\x04?1\x00\x00\x01\xFF 
+Set Tri-Sync 0 Speed 26 \x81\x01\x04?1\x00\x01\x0A\xFF 
+Set Tri-Sync 15 Speed 1 \x81\x01\x04?1\x0F\x00\x01\xFF 
+Set Tri-Sync 15 Speed 26 \x81\x01\x04?1\x0F\x01\x0A\xFF 
+White Balance ATW \x81\x01\x045\x04\xFF 
+White Balance Auto \x81\x01\x045\x00\xFF 
+White Balance Indoor \x81\x01\x045\x01\xFF 
+White Balance Manual \x81\x01\x045\x05\xFF 
+White Balance One Push Trigger \x81\x01\x04\x10\x05\xFF 
+White Balance One Push White Balance \x81\x01\x045\x03\xFF 
+White Balance Outdoor \x81\x01\x045\x02\xFF 
+White Balance Outdoor Auto \x81\x01\x045\x06\xFF 
+White Balance Sodium Lamp \x81\x01\x045\x08\xFF 
+White Balance Sodium Lamp Auto \x81\x01\x045\x07\xFF 
+White Balance Sodium Lamp Outdoor Auto \x81\x01\x045\x09\xFF 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 16 of 19 Rev. B1 
+Appendix B. Update Commands(Serial) 
+ 
+Auto Focus \x81\x09\x048\xFF 
+Backlight \x81\x09\x043\xFF 
+Freeze \x81\x09\x04b\xFF 
+Mute \x81\x09\x04u\xFF 
+Power \x81\x09\x04\x00\xFF 
+White Balance \x81\x09\x045\xFF 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 17 of 19 Rev. B1 
+Appendix C. Set Commands(Ethernet) 
+ 
+Auto Focus Off camera focus mode manual\x0D\x0A 
+Auto Focus On camera focus mode auto\x0D\x0A 
+Auto Iris Off camera ccu set auto_iris off\x0D\x0A 
+Auto Iris On camera ccu set auto_iris on\x0D\x0A 
+Focus Far Speed 0 camera focus far 1\x0D\x0A 
+Focus Far Speed 7 camera focus far 8\x0D\x0A 
+Focus Near Speed 0 camera focus near 1\x0D\x0A 
+Focus Near Speed 7 camera focus near 8\x0D\x0A 
+Focus Stop Speed 0 camera focus stop\x0D\x0A 
+Focus Stop Speed 7 camera focus stop\x0D\x0A 
+Iris 0 camera ccu set iris 0\x0D\x0A 
+Iris 13 camera ccu set iris 13\x0D\x0A 
+Iris Down camera ccu set iris Down\x0D\x0A 
+Iris Reset camera ccu set iris Reset\x0D\x0A 
+Iris Up camera ccu set iris Up\x0D\x0A 
+Pan Left Speed 1 camera pan left 1\x0D\x0A 
+Pan Left Speed 24 camera pan left 24\x0D\x0A 
+Pan Left Speed Default camera pan left\x0D\x0A 
+Pan Right Speed 1 camera pan right 1\x0D\x0A 
+Pan Right Speed 24 camera pan right 24\x0D\x0A 
+Pan Right Speed Default camera pan right\x0D\x0A 
+Pan Stop Speed 1 camera pan stop\x0D\x0A 
+Pan Stop Speed 24 camera pan stop\x0D\x0A 
+Pan Stop Speed Default camera pan stop\x0D\x0A 
+Power Off camera standby on\x0D\x0A 
+Power On camera standby off\x0D\x0A 
+Preset Recall 1 camera preset recall 1\x0D\x0A 
+Preset Recall 16 camera preset recall 16\x0D\x0A 
+Preset Save 1 camera preset store 1\x0D\x0A 
+Preset Save 16 camera preset store 16\x0D\x0A 
+Tilt Down Speed 1 camera tilt down 1\x0D\x0A 
+Tilt Down Speed 20 camera tilt down 20\x0D\x0A 
+Tilt Down Speed Default camera tilt down\x0D\x0A 
+Tilt Stop Speed 1 camera tilt stop\x0D\x0A 
+Tilt Stop Speed 20 camera tilt stop\x0D\x0A 
+Tilt Stop Speed Default camera tilt stop\x0D\x0A 
+Tilt Up Speed 1 camera tilt up 1\x0D\x0A 
+Tilt Up Speed 20 camera tilt up 20\x0D\x0A 
+Tilt Up Speed Default camera tilt up\x0D\x0A 
+Zoom In Speed 1 camera zoom in 1\x0D\x0A 
+Zoom In Speed 7 camera zoom in 7\x0D\x0A 
+Zoom In Speed Default camera zoom in\x0D\x0A 
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 18 of 19 Rev. B1 
+Zoom Out Speed 1 camera zoom out 1\x0D\x0A 
+Zoom Out Speed 7 camera zoom out 7\x0D\x0A 
+Zoom Out Speed Default camera zoom out\x0D\x0A 
+Zoom Stop Speed 1 camera zoom stop\x0D\x0A 
+Zoom Stop Speed 7 camera zoom stop\x0D\x0A 
+Zoom Stop Speed Default camera zoom stop\x0D\x0A 
+ 
+  
+ 
+vadd_camera_RoboSHOT_v1_1_
+2_1.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 12/1/2022 
+ 
+ 
+ 
+ Page 19 of 19 Rev. B1 
+Appendix D. Update Commands(Ethernet) 
+ 
+Auto Focus camera focus mode get\x0D\x0A 
+Auto Iris camera ccu get auto_iris\x0D\x0A 
+Iris camera ccu get iris\x0D\x0A 
+Power camera standby get\x0D\x0A 
+ 

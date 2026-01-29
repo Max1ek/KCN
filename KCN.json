@@ -1,0 +1,57 @@
+{
+    "system": {
+        "name": "KCNdemo",
+        "code_folder_path": "src",
+        "code_entry_file": "main.py",
+        "layout_folder_path": "layout",
+        "sound_folder_path": "sound",
+        "rfile_folder_path": "rfile",
+        "irfile_folder_path": "ir",
+        "system_id": "7675",
+        "author": {
+            "name": "Your Name",
+            "email": "user@yourdomain.com"
+        },
+        "version": "0.0.1",
+        "primary_device_alias": "ProcessorAlias"
+    },
+    "devices": [
+        {
+            "name": "IPCP Pro 250 xi",
+            "part_number": "60-1911-01",
+            "alias": "ProcessorAlias",
+            "network": {
+                "host_network_type": "LAN",
+                "interfaces": [
+                    {
+                        "address": "192.168.254.250",
+                        "type": "LAN"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "TLP Pro 1725TG",
+            "part_number": "60-1792-02",
+            "alias": "PanelAlias",
+            "extron_control_web_id": "c2034c16-c106-44ac-8860-fee84df5cf88",
+            "network": {
+                "host_network_type": "LAN",
+                "interfaces": [
+                    {
+                        "address": "192.168.53.16",
+                        "type": "LAN"
+                    }
+                ]
+            },
+            "ui": {
+                "layout_file": "kcn.gdl",
+                "enable_click_sound": true,
+                "press_feedback": "none",
+                "thumb_change_report_interval": 0.1,
+                "thumb_to_fill_sync_time": 0.5
+            }
+        }
+    ],
+    "schemaVersion": "1.0.0"
+}

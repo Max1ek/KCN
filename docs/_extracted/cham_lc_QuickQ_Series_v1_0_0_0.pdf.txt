@@ -1,0 +1,174 @@
+ 
+cham_lc_QuickQ_Series_v1_0_0
+_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 6/19/2023 
+ 
+ 
+ 
+ Page 1 of 5 Rev. B1 
+This document provides additional assistance with wiring your Extron IP Link Pro Control Processor to your 
+device. Different components may require a different wiring scheme than those listed below. 
+ 
+For complete operating instructions, refer to the user's manual for the specific IP Link Pro Control Processor or 
+the documentation supplied by the manufacturer of the controlled device. 
+ 
+For more information on using Global Scripter Modules, refer to the "Guide to Using Scripter Modules" 
+document. 
+ 
+ 
+Device Specifications 
+Device Type:  Lighting Control 
+Manufacturer:  Chamsys 
+Firmware Version:  N/A 
+Model(s):  QuickQ 20, QuickQ 10, QuickQ 30 Console, QuickQ Rack 
+  
+ 
+Tested on the Following Software and Firmware Versions 
+ 
+IP Link Pro Control Processor Firmware Global Scripter Version 
+3.16.0000-b013 2.19.0.48 
+ 
+Version History 
+ 
+Module Version Date Notes 
+1_0_0_0 6/19/2023 Initial Version 
+ 
+  
+ 
+cham_lc_QuickQ_Series_v1_0_0
+_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 6/19/2023 
+ 
+ 
+ 
+ Page 2 of 5 Rev. B1 
+Module Notes 
+ 
+Supported Class and Example 
+ 
+EthernetClass 
+    InterfaceName = ModuleName.EthernetClass('192.168.254.254', 6553, Model='QuickQ 20') 
+ 
+  
+ 
+cham_lc_QuickQ_Series_v1_0_0
+_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 6/19/2023 
+ 
+ 
+ 
+ Page 3 of 5 Rev. B1 
+Control Commands 
+ 
+Format with Qualifier: 
+ InterfaceName.Set(Command, Value, {'Qualifier Key': 'Qualifier Value'}) 
+ 
+Format without Qualifier: 
+ InterfaceName.Set(Command, Value) 
+ 
+Command 
+ActivatePlayback 
+Value 
+'1' – '10' 
+  
+    # ActivatePlayback example 
+    InterfaceName.Set('ActivatePlayback', '1') 
+Command 
+ActivatePlaybackat100 
+Value 
+'1' – '10' 
+  
+    # ActivatePlaybackat100 example 
+    InterfaceName.Set('ActivatePlaybackat100', '1') 
+Command 
+ReleasePlayback 
+Value 
+'1' – '10' 
+  
+    # ReleasePlayback example 
+    InterfaceName.Set('ReleasePlayback', '1') 
+Command 
+ReleasePlaybackat100 
+Value 
+'1' – '10' 
+  
+    # ReleasePlaybackat100 example 
+    InterfaceName.Set('ReleasePlaybackat100', '1') 
+Command 
+Toggle10SceneButton 
+Value 
+'1' – '10' 
+  
+    # Toggle10SceneButton example 
+    InterfaceName.Set('Toggle10SceneButton', '1') 
+ 
+  
+ 
+cham_lc_QuickQ_Series_v1_0_0
+_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 6/19/2023 
+ 
+ 
+ 
+ Page 4 of 5 Rev. B1 
+ 
+ 
+Network communication 
+When configuring the Ethernet module, be sure device settings match those of the Global Scripter ethernet 
+interface. 
+Port Type: Ethernet (UDP) 
+Device Listen Port: 6553 
+Device Reply Port: 0 
+Logon Credentials 
+Supported: 
+No 
+Multi-Connection 
+Capabilities: 
+Undetermined 
+Listen Port 
+Changeability: 
+No 
+Reply Port 
+Changeability: 
+Yes 
+ 
+ 
+ 
+Ethernet Module Configuration Description 
+Please refer to user manual for settings and changes to the network communication 
+ 
+Notes for the Device 
+ 
+  
+ 
+cham_lc_QuickQ_Series_v1_0_0
+_0.py 
+Global Scripter Module 
+Communication Sheet 
+Revision: 6/19/2023 
+ 
+ 
+ 
+ Page 5 of 5 Rev. B1 
+Appendix A. Set Commands 
+ 
+Activate Playback 1 1A 
+Activate Playback 10 10A 
+Activate Playback at 100 1 1T 
+Activate Playback at 100 10 10T 
+Release Playback 1 1R 
+Release Playback 10 10R 
+Release Playback at 100 1 1U 
+Release Playback at 100 10 10U 
+Toggle 10Scene Button 1 1X 
+Toggle 10Scene Button 10 10X 
+ 
+ 
