@@ -9,7 +9,7 @@ mirrored panels should be in the same file.
 
 # Extron Library imports
 from extronlib.system import MESet, ProgramLog, Wait, RFile, Timer
-from extronlib.ui import Button, Label, Slider,Level
+from extronlib.ui import Button, Label, Level
 # Project imports
 from modules.helper.ModuleSupport import eventEx
 from devices import devTLP as devTLP
@@ -22,6 +22,9 @@ from devices import devLiftRelay as devLiftRelay
 from devices import devScreenRelay as devScreenRelay
 from devices import devDMP64 as devDMP64
 from system import myDevices
+
+import control.projectorControl as controlProjector
+import control.yamahaControl as controlYamaha
 
 # Define UI Objects
 
@@ -121,8 +124,48 @@ def projectorInputGroup_Pressed(button:Button, state:str):
 
 btnLifUp = Button(devTLP, 10)
 btnLiftDown = Button(devTLP, 9)
+
+@eventEx([btnLifUp, btnLiftDown],['Pressed','Released'])
+def lift_buttons_Event(button:Button, state:str):
+    if button == btnLifUp:
+        if state == 'Pressed':
+            controlProjector.LiftUp()
+            print("Lift Up Pressed",button.Name,state)
+            button.SetState(1)
+        elif state == 'Released':
+            print("Lift Up Released",button.Name,state)
+            button.SetState(0)
+    elif button == btnLiftDown:
+        if state == 'Pressed':
+            controlProjector.LiftDown()
+            print("Lift Down Pressed",button.Name,state)
+            button.SetState(1)  
+        elif state == 'Released':
+            print("Lift Down Released",button.Name,state)
+            button.SetState(0)
+
 btnScreenDown = Button(devTLP, 23)
 btnScreenUp = Button(devTLP, 24)
+
+@eventEx([btnScreenDown, btnScreenUp],['Pressed','Released'])
+def screen_buttons_Event(button:Button, state:str):
+    if button == btnScreenUp:
+        if state == 'Pressed':
+            controlProjector.ScreenUp()
+            print("Screen Up Pressed",button.Name,state)
+            button.SetState(1)
+        elif state == 'Released':
+            print("Screen Up Released",button.Name,state)
+            button.SetState(0)
+    elif button == btnScreenDown:
+        if state == 'Pressed':
+            controlProjector.ScreenDown()
+            print("Screen Down Pressed",button.Name,state)
+            button.SetState(1)  
+        elif state == 'Released':
+            print("Screen Down Released",button.Name,state)
+            button.SetState(0)
+
 
 
 @eventEx(btnCinema, 'Pressed')
@@ -173,11 +216,11 @@ yamahaPresetGroup = MESet([btnYamahaPreset1, btnYamahaPreset2, btnYamahaPreset3]
 def yamahaPresetGroup_Pressed(button:Button, state:str):
     yamahaPresetGroup.SetCurrent(button)
     if button == btnYamahaPreset1:
-        devYamahaDSP.RecallPreset(1)
+        controlYamaha.call_yamaha_preset('1')
     elif button == btnYamahaPreset2:
-        devYamahaDSP.RecallPreset(2)
+        controlYamaha.call_yamaha_preset('2')
     elif button == btnYamahaPreset3:
-        devYamahaDSP.RecallPreset(3)
+        controlYamaha.call_yamaha_preset('3')
 
 btnQuickQ30Preset1 = Button(devTLP, 35)
 btnQuickQ30Preset2 = Button(devTLP, 33)

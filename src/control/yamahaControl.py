@@ -17,7 +17,12 @@ Examples:
 # Extron Library imports
 
 # Project imports
-import control.projectorControl
-import control.yamahaControl
-import control.quickQControl
-import control.cameraControl
+from extronlib.system import Wait, ProgramLog
+from modules.helper.ModuleSupport import eventEx
+from devices import devYamahaDSP
+
+
+def call_yamaha_preset(preset_number: str):
+    """Set the Yamaha DSP to a specific preset number."""
+    ProgramLog(f'Setting Yamaha DSP to preset {preset_number}', 'info')
+    devYamahaDSP.Set('PresetRecall', preset_number)
