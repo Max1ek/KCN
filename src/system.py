@@ -107,9 +107,7 @@ def _register_device_events(dev, device_obj):
 
 def Initialize():
     print('****Initialize() called')
-    devTLP.ShowPage('Intro')
-    devTLP.ShowPopup('PopupConnections')
-
+    
     # Register event handlers BEFORE connecting devices
     for idx, (_, dev, _) in enumerate(DEVICE_CONFIG):
         _register_device_events(dev, myDevices[idx])
@@ -119,8 +117,10 @@ def Initialize():
 
     def _connect_next(index=0):
         if index >= len(devices_to_connect):
-            Wait(2, lambda: devTLP.HidePopup('PopupConnections'))
-            Wait(2, lambda: devTLP.ShowPage('StartPage'))
+            if not _ui_unlocked:                                
+                Wait(2, lambda: devTLP.HidePopup('PopupConnections'))
+                Wait(2, lambda: devTLP.ShowPage('StartPage'))
+
             print('System Initialized - All connections attempted')
             return
         

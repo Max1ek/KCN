@@ -18,5 +18,9 @@ import devices
 import ui.tlp
 import control.av
 import system
+from devices import devTLP
+
+devTLP.ShowPage('Intro')
+devTLP.ShowPopup('PopupConnections')
 
 system.Initialize()

@@ -100,6 +100,10 @@ def handle_camera2_state_changed(src, state):
     labCamera2State.SetState(state)
     ProgramLog('Camera2 state updated to: {}'.format(state), 'info')
 
+
+
+
+
 btnCinema = Button(devTLP, 2)
 btnDiscusion = Button(devTLP, 3)
 btnTheatre = Button(devTLP, 4)
@@ -107,7 +111,7 @@ btnTheatre = Button(devTLP, 4)
 btnProjectorStatus = Button(devTLP, 40)
 labProjectorHours = Label(devTLP, 14)
 btnProjectorON = Button(devTLP, 8000)
-btnProjectorOFF = Button(devTLP, 13)
+btnProjectorOFF = Button(devTLP, 13, holdTime=2)
 btnProjectorInputHdmi1 = Button(devTLP, 15)
 btnProjectorInputHdmi2 = Button(devTLP, 18)
 btnProjectorInputDisplayPort = Button(devTLP, 19)
@@ -125,17 +129,19 @@ def projectorInputGroup_Pressed(button:Button, state:str):
         controlProjector.projector_inputDP()
 
 projectorONoffGroup = MESet([btnProjectorON, btnProjectorOFF])
-@eventEx(projectorONoffGroup.Objects,'Pressed')
+@eventEx(projectorONoffGroup.Objects,['Pressed','Held'])
 def projectorONoffGroup_Pressed(button:Button, state:str):
-    projectorONoffGroup.SetCurrent(button)
-    if button == btnProjectorON:
+    
+    if button == btnProjectorON and state == 'Pressed':
+        projectorONoffGroup.SetCurrent(button)
         controlProjector.projector_on()
         btnProjectorON.SetState(1)
-        btnProjectorOFF.SetState(0)
-        btnProjectorStatus.SetState(1)
-    elif button == btnProjectorOFF:
-        controlProjector.projector_off()
         btnProjectorOFF.SetState(1)
+        btnProjectorStatus.SetState(1)
+    elif button == btnProjectorOFF and state == 'Held':
+        projectorONoffGroup.SetCurrent(button)
+        controlProjector.projector_off()
+        btnProjectorOFF.SetState(0)
         btnProjectorON.SetState(0)
         btnProjectorStatus.SetState(0)
 
@@ -199,6 +205,7 @@ def show_main_page(button: Button, state: str):
         yamahaPresetGroup.SetCurrent(btnYamahaPreset1)
         quickQ30PresetGroup.SetCurrent(btnQuickQ30Preset1)
         projectorONoffGroup.SetCurrent(btnProjectorON)
+        btnProjectorOFF.SetState(1)
         controlProjector.projector_on()
         btnProjectorStatus.SetState(1)
     elif button == btnDiscusion:
@@ -278,12 +285,19 @@ def btnClosePopup_Pressed(btnClosePopup:Button, state:str):
     devTLP.HidePopup('ModalPopup')
 
 
-homeBtn = Button(devTLP, 8022)
-@eventEx(homeBtn, 'Pressed')
+homeBtn = Button(devTLP, 8022,holdTime=2)
+@eventEx(homeBtn, 'Held')
 def homeBtn_Pressed(homeBtn:Button, state:str):
     camera2Group.SetCurrent(None)
     camera1Group.SetCurrent(None)
     yamahaPresetGroup.SetCurrent(None)
     quickQ30PresetGroup.SetCurrent(None)
     devTLP.ShowPage('StartPage')   
+
+btnHelp = Button(devTLP, 62)
+@eventEx(btnHelp, 'Pressed')
+def btnHelp_Pressed(btnHelp:Button, state:str):
+    devTLP.ShowPage('HelpPage')
+
+
 
