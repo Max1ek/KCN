@@ -24,5 +24,5 @@ from devices import devYamahaDSP
 
 def call_yamaha_preset(preset_number: str):
     """Set the Yamaha DSP to a specific preset number."""
-    ProgramLog(f'Setting Yamaha DSP to preset {preset_number}', 'info')
+    ProgramLog('Setting Yamaha DSP to preset {}'.format(preset_number), 'info')
     devYamahaDSP.Set('PresetRecall', preset_number)

@@ -114,8 +114,30 @@ btnProjectorInputDisplayPort = Button(devTLP, 19)
 
 projectorInputGroup = MESet([btnProjectorInputHdmi1, btnProjectorInputHdmi2, btnProjectorInputDisplayPort])
 projectorInputGroup.SetCurrent(btnProjectorInputHdmi1)
+@eventEx(projectorInputGroup.Objects,'Pressed')
+def projectorInputGroup_Pressed(button:Button, state:str):
+    projectorInputGroup.SetCurrent(button)
+    if button == btnProjectorInputHdmi1:
+        controlProjector.projector_inputHDMI()
+    elif button == btnProjectorInputHdmi2:
+        controlProjector.projector_inputDP()
+    elif button == btnProjectorInputDisplayPort:
+        controlProjector.projector_inputDP()
 
 projectorONoffGroup = MESet([btnProjectorON, btnProjectorOFF])
+@eventEx(projectorONoffGroup.Objects,'Pressed')
+def projectorONoffGroup_Pressed(button:Button, state:str):
+    projectorONoffGroup.SetCurrent(button)
+    if button == btnProjectorON:
+        controlProjector.projector_on()
+        btnProjectorON.SetState(1)
+        btnProjectorOFF.SetState(0)
+        btnProjectorStatus.SetState(1)
+    elif button == btnProjectorOFF:
+        controlProjector.projector_off()
+        btnProjectorOFF.SetState(1)
+        btnProjectorON.SetState(0)
+        btnProjectorStatus.SetState(0)
 
 
 @eventEx(projectorInputGroup.Objects,'Pressed')
@@ -177,7 +199,8 @@ def show_main_page(button: Button, state: str):
         yamahaPresetGroup.SetCurrent(btnYamahaPreset1)
         quickQ30PresetGroup.SetCurrent(btnQuickQ30Preset1)
         projectorONoffGroup.SetCurrent(btnProjectorON)
-       # btnProjectorON.SetState(1)
+        controlProjector.projector_on()
+        btnProjectorStatus.SetState(1)
     elif button == btnDiscusion:
         projectorInputGroup.SetCurrent(btnProjectorInputHdmi2)
         yamahaPresetGroup.SetCurrent(btnYamahaPreset2)
@@ -208,6 +231,8 @@ camera2Group = MESet([btnCamera2Preset1, btnCamera2Preset2, btnCamera2Preset3])
 def camera2Group_Pressed(button:Button, state:str):
     camera2Group.SetCurrent(button)
 
+
+
 btnYamahaPreset1 = Button(devTLP, 31)
 btnYamahaPreset2 = Button(devTLP, 29)
 btnYamahaPreset3 = Button(devTLP, 30)
@@ -221,6 +246,8 @@ def yamahaPresetGroup_Pressed(button:Button, state:str):
         controlYamaha.call_yamaha_preset('2')
     elif button == btnYamahaPreset3:
         controlYamaha.call_yamaha_preset('3')
+
+
 
 btnQuickQ30Preset1 = Button(devTLP, 35)
 btnQuickQ30Preset2 = Button(devTLP, 33)
