@@ -38,10 +38,6 @@ def projectorONoffGroup_Pressed(button:Button, state:str):
         controlProjector.projectorOff()
 
 
-@eventEx(projectorInputGroup.Objects,'Pressed')
-def projectorInputGroup_Pressed(button:Button, state:str):
-    projectorInputGroup.SetCurrent(button)
-
 btnLifUp = Button(devTLP, 10)
 btnLiftDown = Button(devTLP, 9)
 

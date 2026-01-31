@@ -18,9 +18,30 @@ Examples:
 
 # Project imports
 from extronlib.system import Wait, ProgramLog
-from modules.helper.ModuleSupport import eventEx
+from modules.helper.ModuleSupport import GenericEvent, eventEx
 from devices import devYamahaDSP
 
+yamahaRecallPreset = GenericEvent('Yamaha Recall Preset')
+
+def _yamahaRecallPresetCallback(command, value, qualifier):
+    """Internal callback that triggers the GenericEvent"""
+    ProgramLog('Yamaha Recall Preset status: {}'.format(value), 'info')
+    yamahaRecallPreset.Trigger(command, value, qualifier)
+
+@eventEx(devYamahaDSP, ['Connected', 'Disconnected'])
+def handleYamahaConnection(interface, state):
+    """Subscribe to Yamaha DSP status on connection"""
+    if state == 'Connected':
+        ProgramLog('Yamaha DSP connected - subscribing to status', 'info')
+        devYamahaDSP.SubscribeStatus('PresetRecall', None, _yamahaRecallPresetCallback)
+     
+        try:
+            devYamahaDSP.Update('PresetRecall')
+          
+        except Exception as exc:
+            ProgramLog('Yamaha DSP status update failed: {}'.format(exc), 'error')
+    else:
+        ProgramLog('Yamaha DSP disconnected', 'warning')
 
 def call_yamaha_preset(preset_number: str):
     """Set the Yamaha DSP to a specific preset number."""

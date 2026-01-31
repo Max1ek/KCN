@@ -26,6 +26,10 @@ from system import myDevices
 import control.projectorControl as controlProjector
 import control.yamahaControl as controlYamaha
 import ui.tlpProjector as tlpProjector
+import ui.tlpCamera as tlpCamera
+import ui.tlpYamaha as tlpYamaha
+import ui.tlpQuickQ as tlpQuickQ
+
 
 # Define UI Objects
 
@@ -102,14 +106,9 @@ def handle_camera2_state_changed(src, state):
     ProgramLog('Camera2 state updated to: {}'.format(state), 'info')
 
 
-
-
-
 btnCinema = Button(devTLP, 2)
 btnDiscusion = Button(devTLP, 3)
 btnTheatre = Button(devTLP, 4)
-
-
 
 
 @eventEx(btnCinema, 'Pressed')
@@ -118,73 +117,22 @@ btnTheatre = Button(devTLP, 4)
 def show_main_page(button: Button, state: str):
     if button == btnCinema:
         tlpProjector.projectorInputGroup.SetCurrent(tlpProjector.btnProjectorInputHdmi1)
-        yamahaPresetGroup.SetCurrent(btnYamahaPreset1)
-        quickQ30PresetGroup.SetCurrent(btnQuickQ30Preset1)
+        tlpYamaha.yamahaPresetGroup.SetCurrent(tlpYamaha.btnYamahaPreset1)
+        tlpQuickQ.quickQ30PresetGroup.SetCurrent(tlpQuickQ.btnQuickQ30Preset1)
         tlpProjector.projectorONoffGroup.SetCurrent(tlpProjector.btnProjectorON)
         tlpProjector.btnProjectorOFF.SetState(1)
         controlProjector.projectorOn()
         tlpProjector.btnProjectorStatus.SetState(1)
     elif button == btnDiscusion:
         tlpProjector.projectorInputGroup.SetCurrent(tlpProjector.btnProjectorInputHdmi2)
-        yamahaPresetGroup.SetCurrent(btnYamahaPreset2)
-        quickQ30PresetGroup.SetCurrent(btnQuickQ30Preset2)
+        tlpYamaha.yamahaPresetGroup.SetCurrent(tlpYamaha.btnYamahaPreset2)
+        tlpQuickQ.quickQ30PresetGroup.SetCurrent(tlpQuickQ.btnQuickQ30Preset2)
         tlpProjector.projectorONoffGroup.SetCurrent(None)
     elif button == btnTheatre:
         tlpProjector.projectorInputGroup.SetCurrent(tlpProjector.btnProjectorInputDisplayPort)
         tlpProjector.projectorONoffGroup.SetCurrent(None)
     devTLP.ShowPage('MainPage')
 
-
-
-btnCamera1Preset1 = Button(devTLP, 27)
-btnCamera1Preset2 = Button(devTLP, 25)
-btnCamera1Preset3 = Button(devTLP, 26)
-
-camera1Group = MESet([btnCamera1Preset1, btnCamera1Preset2, btnCamera1Preset3])
-@eventEx(camera1Group.Objects,'Pressed')
-def camera1Group_Pressed(button:Button, state:str):
-    camera1Group.SetCurrent(button)
-
-btnCamera2Preset1 = Button(devTLP, 44)
-btnCamera2Preset2 = Button(devTLP, 42)  
-btnCamera2Preset3 = Button(devTLP, 43)
-
-camera2Group = MESet([btnCamera2Preset1, btnCamera2Preset2, btnCamera2Preset3])
-@eventEx(camera2Group.Objects,'Pressed')    
-def camera2Group_Pressed(button:Button, state:str):
-    camera2Group.SetCurrent(button)
-
-
-
-btnYamahaPreset1 = Button(devTLP, 31)
-btnYamahaPreset2 = Button(devTLP, 29)
-btnYamahaPreset3 = Button(devTLP, 30)
-yamahaPresetGroup = MESet([btnYamahaPreset1, btnYamahaPreset2, btnYamahaPreset3])
-@eventEx(yamahaPresetGroup.Objects,'Pressed')
-def yamahaPresetGroup_Pressed(button:Button, state:str):
-    yamahaPresetGroup.SetCurrent(button)
-    if button == btnYamahaPreset1:
-        controlYamaha.call_yamaha_preset('1')
-    elif button == btnYamahaPreset2:
-        controlYamaha.call_yamaha_preset('2')
-    elif button == btnYamahaPreset3:
-        controlYamaha.call_yamaha_preset('3')
-
-
-
-btnQuickQ30Preset1 = Button(devTLP, 35)
-btnQuickQ30Preset2 = Button(devTLP, 33)
-btnQuickQ30Preset3 = Button(devTLP, 34)
-quickQ30PresetGroup = MESet([btnQuickQ30Preset1, btnQuickQ30Preset2, btnQuickQ30Preset3])
-@eventEx(quickQ30PresetGroup.Objects,'Pressed')
-def quickQ30PresetGroup_Pressed(button:Button, state:str):
-        quickQ30PresetGroup.SetCurrent(button)
-        if button == btnQuickQ30Preset1:
-            devQuickQ.RecallPreset(1)
-        elif button == btnQuickQ30Preset2:
-            devQuickQ.RecallPreset(2)
-        elif button == btnQuickQ30Preset3:
-            devQuickQ.RecallPreset(3)
 
 
 btnStatus = Button(devTLP, 20)
@@ -204,10 +152,13 @@ def btnClosePopup_Pressed(btnClosePopup:Button, state:str):
 homeBtn = Button(devTLP, 8022,holdTime=2)
 @eventEx(homeBtn, 'Held')
 def homeBtn_Pressed(homeBtn:Button, state:str):
-    camera2Group.SetCurrent(None)
-    camera1Group.SetCurrent(None)
-    yamahaPresetGroup.SetCurrent(None)
-    quickQ30PresetGroup.SetCurrent(None)
+    tlpCamera.camera2Group.SetCurrent(None)
+    tlpCamera.camera1Group.SetCurrent(None)
+    tlpYamaha.yamahaPresetGroup.SetCurrent(None)
+    tlpQuickQ.quickQ30PresetGroup.SetCurrent(None)
+    #doplnit vypnutie projektora a lift 
+    controlProjector.projectorOff()
+    tlpProjector.btnProjectorStatus.SetState(0)
     devTLP.ShowPage('StartPage')   
 
 btnHelp = Button(devTLP, 62)
