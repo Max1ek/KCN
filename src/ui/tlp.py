@@ -25,6 +25,7 @@ from system import myDevices
 
 import control.projectorControl as controlProjector
 import control.yamahaControl as controlYamaha
+import ui.tlpProjector as tlpProjector
 
 # Define UI Objects
 
@@ -108,91 +109,6 @@ btnCinema = Button(devTLP, 2)
 btnDiscusion = Button(devTLP, 3)
 btnTheatre = Button(devTLP, 4)
 
-btnProjectorStatus = Button(devTLP, 40)
-labProjectorHours = Label(devTLP, 14)
-btnProjectorON = Button(devTLP, 8000)
-btnProjectorOFF = Button(devTLP, 13, holdTime=2)
-btnProjectorInputHdmi1 = Button(devTLP, 15)
-btnProjectorInputHdmi2 = Button(devTLP, 18)
-btnProjectorInputDisplayPort = Button(devTLP, 19)
-
-projectorInputGroup = MESet([btnProjectorInputHdmi1, btnProjectorInputHdmi2, btnProjectorInputDisplayPort])
-projectorInputGroup.SetCurrent(btnProjectorInputHdmi1)
-@eventEx(projectorInputGroup.Objects,'Pressed')
-def projectorInputGroup_Pressed(button:Button, state:str):
-    projectorInputGroup.SetCurrent(button)
-    if button == btnProjectorInputHdmi1:
-        controlProjector.projector_inputHDMI()
-    elif button == btnProjectorInputHdmi2:
-        controlProjector.projector_inputDP()
-    elif button == btnProjectorInputDisplayPort:
-        controlProjector.projector_inputDP()
-
-projectorONoffGroup = MESet([btnProjectorON, btnProjectorOFF])
-@eventEx(projectorONoffGroup.Objects,['Pressed','Held'])
-def projectorONoffGroup_Pressed(button:Button, state:str):
-    
-    if button == btnProjectorON and state == 'Pressed':
-        projectorONoffGroup.SetCurrent(button)
-        controlProjector.projector_on()
-        btnProjectorON.SetState(1)
-        btnProjectorOFF.SetState(1)
-        btnProjectorStatus.SetState(1)
-    elif button == btnProjectorOFF and state == 'Held':
-        projectorONoffGroup.SetCurrent(button)
-        controlProjector.projector_off()
-        btnProjectorOFF.SetState(0)
-        btnProjectorON.SetState(0)
-        btnProjectorStatus.SetState(0)
-
-
-@eventEx(projectorInputGroup.Objects,'Pressed')
-def projectorInputGroup_Pressed(button:Button, state:str):
-    projectorInputGroup.SetCurrent(button)
-
-btnLifUp = Button(devTLP, 10)
-btnLiftDown = Button(devTLP, 9)
-
-@eventEx([btnLifUp, btnLiftDown],['Pressed','Released'])
-def lift_buttons_Event(button:Button, state:str):
-    if button == btnLifUp:
-        if state == 'Pressed':
-            controlProjector.LiftUp()
-            print("Lift Up Pressed",button.Name,state)
-            button.SetState(1)
-        elif state == 'Released':
-            print("Lift Up Released",button.Name,state)
-            button.SetState(0)
-    elif button == btnLiftDown:
-        if state == 'Pressed':
-            controlProjector.LiftDown()
-            print("Lift Down Pressed",button.Name,state)
-            button.SetState(1)  
-        elif state == 'Released':
-            print("Lift Down Released",button.Name,state)
-            button.SetState(0)
-
-btnScreenDown = Button(devTLP, 23)
-btnScreenUp = Button(devTLP, 24)
-
-@eventEx([btnScreenDown, btnScreenUp],['Pressed','Released'])
-def screen_buttons_Event(button:Button, state:str):
-    if button == btnScreenUp:
-        if state == 'Pressed':
-            controlProjector.ScreenUp()
-            print("Screen Up Pressed",button.Name,state)
-            button.SetState(1)
-        elif state == 'Released':
-            print("Screen Up Released",button.Name,state)
-            button.SetState(0)
-    elif button == btnScreenDown:
-        if state == 'Pressed':
-            controlProjector.ScreenDown()
-            print("Screen Down Pressed",button.Name,state)
-            button.SetState(1)  
-        elif state == 'Released':
-            print("Screen Down Released",button.Name,state)
-            button.SetState(0)
 
 
 
@@ -201,21 +117,21 @@ def screen_buttons_Event(button:Button, state:str):
 @eventEx(btnTheatre, 'Pressed')
 def show_main_page(button: Button, state: str):
     if button == btnCinema:
-        projectorInputGroup.SetCurrent(btnProjectorInputHdmi1)
+        tlpProjector.projectorInputGroup.SetCurrent(tlpProjector.btnProjectorInputHdmi1)
         yamahaPresetGroup.SetCurrent(btnYamahaPreset1)
         quickQ30PresetGroup.SetCurrent(btnQuickQ30Preset1)
-        projectorONoffGroup.SetCurrent(btnProjectorON)
-        btnProjectorOFF.SetState(1)
-        controlProjector.projector_on()
-        btnProjectorStatus.SetState(1)
+        tlpProjector.projectorONoffGroup.SetCurrent(tlpProjector.btnProjectorON)
+        tlpProjector.btnProjectorOFF.SetState(1)
+        controlProjector.projectorOn()
+        tlpProjector.btnProjectorStatus.SetState(1)
     elif button == btnDiscusion:
-        projectorInputGroup.SetCurrent(btnProjectorInputHdmi2)
+        tlpProjector.projectorInputGroup.SetCurrent(tlpProjector.btnProjectorInputHdmi2)
         yamahaPresetGroup.SetCurrent(btnYamahaPreset2)
         quickQ30PresetGroup.SetCurrent(btnQuickQ30Preset2)
-        projectorONoffGroup.SetCurrent(None)
+        tlpProjector.projectorONoffGroup.SetCurrent(None)
     elif button == btnTheatre:
-        projectorInputGroup.SetCurrent(btnProjectorInputDisplayPort)
-        projectorONoffGroup.SetCurrent(None)
+        tlpProjector.projectorInputGroup.SetCurrent(tlpProjector.btnProjectorInputDisplayPort)
+        tlpProjector.projectorONoffGroup.SetCurrent(None)
     devTLP.ShowPage('MainPage')
 
 
