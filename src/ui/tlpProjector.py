@@ -30,19 +30,12 @@ def projectorInputGroup_Pressed(button:Button, state:str):
 projectorONoffGroup = MESet([btnProjectorON, btnProjectorOFF])
 @eventEx(projectorONoffGroup.Objects,['Pressed','Held'])
 def projectorONoffGroup_Pressed(button:Button, state:str):
-    
     if button == btnProjectorON and state == 'Pressed':
         projectorONoffGroup.SetCurrent(button)
         controlProjector.projectorOn()
-        btnProjectorON.SetState(1)
-        btnProjectorOFF.SetState(1)
-        btnProjectorStatus.SetState(1)
     elif button == btnProjectorOFF and state == 'Held':
         projectorONoffGroup.SetCurrent(button)
         controlProjector.projectorOff()
-        btnProjectorOFF.SetState(0)
-        btnProjectorON.SetState(0)
-        btnProjectorStatus.SetState(0)
 
 
 @eventEx(projectorInputGroup.Objects,'Pressed')
