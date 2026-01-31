@@ -15,14 +15,32 @@ Examples:
 # Python imports
 
 # Extron Library imports
-
+import ui.tlp as tlp
 # Project imports
 from extronlib.system import Wait, ProgramLog
-from modules.helper.ModuleSupport import eventEx
+from modules.helper.ModuleSupport import eventEx, GenericEvent
 from devices import devBarcoProjector
 from devices import devLiftRelay 
 from devices import devScreenRelay
-from devices import devDMP64
+
+
+projectorInput = GenericEvent('Projector Input Changed')
+projectorPower = GenericEvent('Projector Power Changed')
+projectorHours = GenericEvent('Projector Hours Changed')
+
+
+@eventEx(devBarcoProjector, ['Connected', 'Disconnected'])
+def initProjectorSubscriptions():
+    devBarcoProjector.SubscribeStatus('Power', None, projectorPower.Trigger)
+    devBarcoProjector.SubscribeStatus('Input', None, projectorInput.Trigger)
+    devBarcoProjector.SubscribeStatus('LaserHours', None, projectorHours.Trigger)
+
+    try:
+        devBarcoProjector.Update('Power')
+        devBarcoProjector.Update('Input')
+        devBarcoProjector.Update('LaserHours')
+    except Exception as exc:
+        ProgramLog('Projector status update failed: {}'.format(exc), 'error')
 
 
 def ScreenUp():
@@ -68,3 +86,28 @@ def projector_inputDP():
     """Set projector input to DisplayPort"""
     ProgramLog('Setting Projector Input to DisplayPort', 'info')
     devBarcoProjector.Set('Input', 'L1 DisplayPort')
+
+@eventEx(projectorHours, 'Triggered')
+def _projector_hours_status(source:GenericEvent,command:str, value:str,qualifier:str):
+    ProgramLog('Projector Hours Status Changed: {}'.format(value), 'info')
+    tlp.lblProjectorHours.SetText(value)
+    
+@eventEx(projectorPower, 'Triggered')
+def _projector_power_status(source:GenericEvent,command:str, value:str,qualifier:str):
+    ProgramLog('Projector Power Status Changed: {}'.format(value), 'info')
+    if value == 'On':
+        tlp.btnProjectorON.SetState(1)
+        tlp.btnProjectorOFF.SetState(0)
+        tlp.btnProjectorStatus.SetState(1)
+    elif value == 'Off':
+        tlp.btnProjectorON.SetState(0)
+        tlp.btnProjectorOFF.SetState(1)
+        tlp.btnProjectorStatus.SetState(0)
+
+@eventEx(projectorInput, 'Triggered')
+def _projector_input_status(source:GenericEvent,command:str, value:str,qualifier:str):
+    ProgramLog('Projector Input Status Changed: {}'.format(value), 'info')
+    if value == 'L1 HDMI':
+        tlp.projectorInputGroup.SetCurrent(tlp.btnProjectorInputHdmi1)
+    elif value == 'L1 DisplayPort':
+        tlp.projectorInputGroup.SetCurrent(tlp.btnProjectorInputDisplayPort)

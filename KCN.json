@@ -45,7 +45,7 @@
                 ]
             },
             "ui": {
-                "layout_file": "kcn.gdl",
+                "layout_file": "kcnPalace.gdl",
                 "enable_click_sound": true,
                 "press_feedback": "none",
                 "thumb_change_report_interval": 0.1,

@@ -27,6 +27,7 @@ from devices import (
     devDTP,
     devDMP64,
 )
+import control.projectorControl as controlProjector
 
 from variables import (
     IP_BARCO_PROJECTOR, IP_YAMAHA_DSP, IP_QUICKQ,
@@ -107,7 +108,7 @@ def _register_device_events(dev, device_obj):
 
 def Initialize():
     print('****Initialize() called')
-    
+   
     # Register event handlers BEFORE connecting devices
     for idx, (_, dev, _) in enumerate(DEVICE_CONFIG):
         _register_device_events(dev, myDevices[idx])
