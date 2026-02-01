@@ -95,7 +95,7 @@ def handleProjectorPowerChange(source, command, value, qualifier):
         btnProjectorON.SetState(0)
         btnProjectorOFF.SetState(1)
         btnProjectorStatus.SetState(0)
-    elif value in ['Warming', 'Cooling']:
+    elif value in ['Service', 'Error']:
         btnProjectorStatus.SetState(2)
 
 
